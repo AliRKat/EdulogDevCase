@@ -2,10 +2,25 @@ using UnityEngine;
 
 public class GameManager : MonoBehaviour
 {
+    public static GameManager Instance { get; private set; }
+
     private Camera mainCamera;
     private Material originalMaterial;
     public Material highlightMaterial;
     private GameObject lastHoveredObject;
+    public GameObject SelectedObject { get; set; }
+
+    void Awake()
+    {
+        if (Instance != null && Instance != this)
+        {
+            Destroy(gameObject);
+        }
+        else
+        {
+            Instance = this;
+        }
+    }
 
     void Start()
     {
@@ -21,23 +36,33 @@ public class GameManager : MonoBehaviour
         {
             GameObject hoveredObject = hit.collider.gameObject;
 
-            if (hoveredObject != lastHoveredObject && gameObject.CompareTag("Tree"))
+            if (hoveredObject.CompareTag("Tree"))
             {
-                if (lastHoveredObject != null)
+                if (hoveredObject != lastHoveredObject)
                 {
-                    ResetHighlight();
+                    if (lastHoveredObject != null)
+                    {
+                        ResetHighlight();
+                    }
+                    HighlightObject(hoveredObject);
+                    lastHoveredObject = hoveredObject;
                 }
-                HighlightObject(hoveredObject);
-                lastHoveredObject = hoveredObject;
             }
-        }
-        else
-        {
-            if (lastHoveredObject != null)
+            else if (lastHoveredObject != null)
             {
                 ResetHighlight();
                 lastHoveredObject = null;
             }
+
+            if (Input.GetMouseButtonDown(0) && hoveredObject.CompareTag("Tree"))
+            {
+                SelectObject(hoveredObject);
+            }
+        }
+        else if (lastHoveredObject != null)
+        {
+            ResetHighlight();
+            lastHoveredObject = null;
         }
     }
 
@@ -61,5 +86,11 @@ public class GameManager : MonoBehaviour
                 renderer.material = originalMaterial;
             }
         }
+    }
+
+    void SelectObject(GameObject obj)
+    {
+        SelectedObject = obj;
+        Debug.Log("Selected Object: " + obj.name);
     }
 }
