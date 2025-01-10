@@ -40,6 +40,8 @@ public class PlayerMovement : MonoBehaviour
         }
     }
 
+    // GameManager.Instance.SelectedObject should not be able to used like this.
+    // Update this section
     private void MoveToSelectedObject()
     {
         Vector3 targetPosition = GameManager.Instance.SelectedObject.transform.position;
@@ -59,6 +61,7 @@ public class PlayerMovement : MonoBehaviour
         RotateTowardsTarget(targetPosition);
     }
 
+    // Animator should get its own logic
     private void UpdateAnimator()
     {
         float speed = agent.velocity.magnitude;

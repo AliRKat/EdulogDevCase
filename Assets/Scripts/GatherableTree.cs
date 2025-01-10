@@ -16,7 +16,6 @@ public class GatherableTree : MonoBehaviour, IGatherable
         }
 
         GameManager.Instance.OnGatherableClicked += HandleGatherEvent;
-
     }
 
     public void Highlight()
