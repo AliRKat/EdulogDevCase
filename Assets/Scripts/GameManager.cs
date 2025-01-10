@@ -1,33 +1,36 @@
+using System;
 using UnityEngine;
 
 public class GameManager : MonoBehaviour
 {
-    public static GameManager Instance { get; private set; }
+    public static GameManager Instance;
+
+    public GameObject SelectedObject;
+    public event Action<GameObject> OnGatherableClicked;
 
     private Camera mainCamera;
-    private Material originalMaterial;
-    public Material highlightMaterial;
     private GameObject lastHoveredObject;
-    public GameObject SelectedObject { get; set; }
 
     void Awake()
     {
-        if (Instance != null && Instance != this)
-        {
-            Destroy(gameObject);
-        }
-        else
+        if (Instance == null)
         {
             Instance = this;
         }
-    }
+        else
+        {
+            Destroy(gameObject);
+        }
 
-    void Start()
-    {
         mainCamera = Camera.main;
     }
 
     void Update()
+    {
+        HighlightObjectLogic();
+    }
+
+    void HighlightObjectLogic()
     {
         Ray ray = mainCamera.ScreenPointToRay(Input.mousePosition);
         RaycastHit hit;
@@ -35,55 +38,27 @@ public class GameManager : MonoBehaviour
         if (Physics.Raycast(ray, out hit))
         {
             GameObject hoveredObject = hit.collider.gameObject;
+            IGatherable gatherable = hoveredObject.GetComponent<IGatherable>();
 
-            if (hoveredObject.CompareTag("Tree"))
+            if (gatherable != null)
             {
-                if (hoveredObject != lastHoveredObject)
+                Highlight(hoveredObject, gatherable);
+            }
+            else
+            {
+                if (lastHoveredObject != null)
                 {
-                    if (lastHoveredObject != null)
-                    {
-                        ResetHighlight();
-                    }
-                    HighlightObject(hoveredObject);
-                    lastHoveredObject = hoveredObject;
+                    ResetHighlight();
+                    lastHoveredObject = null;
                 }
             }
-            else if (lastHoveredObject != null)
+        }
+        else
+        {
+            if (lastHoveredObject != null)
             {
                 ResetHighlight();
                 lastHoveredObject = null;
-            }
-
-            if (Input.GetMouseButtonDown(0) && hoveredObject.CompareTag("Tree"))
-            {
-                SelectObject(hoveredObject);
-            }
-        }
-        else if (lastHoveredObject != null)
-        {
-            ResetHighlight();
-            lastHoveredObject = null;
-        }
-    }
-
-    void HighlightObject(GameObject obj)
-    {
-        Renderer renderer = obj.GetComponent<Renderer>();
-        if (renderer != null)
-        {
-            originalMaterial = renderer.material;
-            renderer.material = highlightMaterial;
-        }
-    }
-
-    void ResetHighlight()
-    {
-        if (lastHoveredObject != null)
-        {
-            Renderer renderer = lastHoveredObject.GetComponent<Renderer>();
-            if (renderer != null)
-            {
-                renderer.material = originalMaterial;
             }
         }
     }
@@ -91,6 +66,36 @@ public class GameManager : MonoBehaviour
     void SelectObject(GameObject obj)
     {
         SelectedObject = obj;
-        Debug.Log("Selected Object: " + obj.name);
+        OnGatherableClicked?.Invoke(obj);
+    }
+
+    void Highlight(GameObject hoveredObject, IGatherable gatherable)
+    {
+        if (hoveredObject != lastHoveredObject)
+        {
+            if (lastHoveredObject != null)
+            {
+                gatherable.ResetHighlight();
+            }
+            gatherable.Highlight();
+            lastHoveredObject = hoveredObject;
+        }
+
+        if (Input.GetMouseButtonDown(0))
+        {
+            SelectObject(hoveredObject);
+        }
+    }
+
+    void ResetHighlight()
+    {
+        if (lastHoveredObject != null)
+        {
+            IGatherable gatherable = lastHoveredObject.GetComponent<IGatherable>();
+            if (gatherable != null)
+            {
+                gatherable.ResetHighlight();
+            }
+        }
     }
 }
