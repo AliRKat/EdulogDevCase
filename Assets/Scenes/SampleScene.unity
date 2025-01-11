@@ -330,7 +330,6 @@ GameObject:
   - component: {fileID: 1730948241}
   - component: {fileID: 1730948240}
   - component: {fileID: 1730948239}
-  - component: {fileID: 1730948238}
   - component: {fileID: 1730948237}
   m_Layer: 0
   m_Name: Tree (1)
@@ -351,29 +350,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 311a7b65fadc39b49b428a0ce8613b47, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  gatherableData: {fileID: 11400000, guid: dec996cf29e44304e9c3a9eb94a875ff, type: 2}
+  state: 0
+  plowTime: 0
+  growTime: 0
+  harvestTime: 0
   highlightMaterial: {fileID: 2100000, guid: 81e64ec216e6d014b80d1fa6192d01a0, type: 2}
---- !u!64 &1730948238
-MeshCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1730948236}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 5
-  m_Convex: 1
-  m_CookingOptions: 30
-  m_Mesh: {fileID: 43714574525747970, guid: db021e55dc0788543b23555a04099959, type: 2}
 --- !u!64 &1730948239
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -473,6 +455,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 311a7b65fadc39b49b428a0ce8613b47, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  gatherableData: {fileID: 11400000, guid: dec996cf29e44304e9c3a9eb94a875ff, type: 2}
+  state: 0
+  plowTime: 0
+  growTime: 0
+  harvestTime: 0
   highlightMaterial: {fileID: 2100000, guid: 81e64ec216e6d014b80d1fa6192d01a0, type: 2}
 --- !u!1 &2018699522
 GameObject:
@@ -610,6 +597,7 @@ GameObject:
   - component: {fileID: 33307336084546981}
   - component: {fileID: 23998128325954435}
   - component: {fileID: 64498582534469985}
+  - component: {fileID: 64498582534469986}
   m_Layer: 0
   m_Name: Farm
   m_TagString: Untagged
@@ -628,7 +616,6 @@ GameObject:
   - component: {fileID: 4106156227642864}
   - component: {fileID: 33690693324825652}
   - component: {fileID: 23730455220625002}
-  - component: {fileID: 64893092272140500}
   - component: {fileID: 64809619829573378}
   - component: {fileID: 1886866762}
   m_Layer: 0
@@ -790,6 +777,24 @@ MeshCollider:
   m_Convex: 1
   m_CookingOptions: 30
   m_Mesh: {fileID: 4300000, guid: 2ce1b2c146c1df143b6c9d391c40072f, type: 3}
+--- !u!114 &64498582534469986
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1645246024192539}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 311a7b65fadc39b49b428a0ce8613b47, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  gatherableData: {fileID: 11400000, guid: 20d3468de15c7694fb72fbd928221681, type: 2}
+  state: 0
+  plowTime: 0
+  growTime: 0
+  harvestTime: 0
+  highlightMaterial: {fileID: 2100000, guid: 81e64ec216e6d014b80d1fa6192d01a0, type: 2}
 --- !u!64 &64809619829573378
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -812,28 +817,6 @@ MeshCollider:
   m_Convex: 1
   m_CookingOptions: 30
   m_Mesh: {fileID: 43714574525747970, guid: db021e55dc0788543b23555a04099959, type: 2}
---- !u!64 &64893092272140500
-MeshCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1850300686849482}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 5
-  m_Convex: 1
-  m_CookingOptions: 30
-  m_Mesh: {fileID: 43603779930009816, guid: db021e55dc0788543b23555a04099959, type: 2}
 --- !u!1001 &4461130780819114167
 PrefabInstance:
   m_ObjectHideFlags: 0

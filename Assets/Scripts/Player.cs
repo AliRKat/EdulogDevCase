@@ -10,7 +10,11 @@ public class Player : MonoBehaviour
     private PlayerMovement playerMovement;
 
     private NavMeshAgent agent;
-    public event Action<GameObject> OnGatherStarted;
+
+    public event Action<GameObject> OnPlowStart;
+    public event Action<GameObject> OnPlowFinish;
+    public event Action<GameObject> OnHarvestStart;
+    public event Action<GameObject> OnHarvestFinish;
 
     private void Awake()
     {
@@ -42,6 +46,6 @@ public class Player : MonoBehaviour
     public void PlayerArrivedGatherable(GameObject gatherable)
     {
         Debug.Log("Player has arrived to this gatherable: " + gatherable.name);
-        OnGatherStarted?.Invoke(gatherable);
+        //OnGatherStarted?.Invoke(gatherable);
     }
 }

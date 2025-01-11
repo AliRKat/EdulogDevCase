@@ -2,10 +2,23 @@ using UnityEngine;
 
 public class Gatherable : MonoBehaviour, IInteractable
 {
-    private Material originalMaterial;
+    public GatherableSO gatherableData;
+    public GatherableStates state;
+    public float plowTime;
+    public float growTime;
+    public float harvestTime;
     public Material highlightMaterial;
 
+    private Material originalMaterial;
     private Renderer _renderer;
+
+    private void OnDisable()
+    {
+        Player.Instance.OnPlowStart -= HandlePlowStart;
+        Player.Instance.OnPlowFinish -= HandlePlowFinish;
+        Player.Instance.OnHarvestStart -= HandleHarvestStart;
+        Player.Instance.OnHarvestFinish -= HandleHarvestFinish;
+    }
 
     void Start()
     {
@@ -15,8 +28,15 @@ public class Gatherable : MonoBehaviour, IInteractable
             originalMaterial = _renderer.material;
         }
 
-        GameManager.Instance.OnInteractableClicked += HandleClickEvent;
-        Player.Instance.OnGatherStarted += HandleGatherStart;
+        plowTime = gatherableData.plowTime;
+        growTime = gatherableData.growTime;
+        harvestTime = gatherableData.harvestTime;
+        state = gatherableData.state;
+
+        Player.Instance.OnPlowStart += HandlePlowStart;
+        Player.Instance.OnPlowFinish += HandlePlowFinish;
+        Player.Instance.OnHarvestStart += HandleHarvestStart;
+        Player.Instance.OnHarvestFinish += HandleHarvestFinish;
     }
 
     public void Highlight()
@@ -35,19 +55,20 @@ public class Gatherable : MonoBehaviour, IInteractable
         }
     }
 
-    public void HandleClickEvent(GameObject obj)
+    private void HandlePlowStart(GameObject obj)
     {
-        if(obj == this.gameObject)
-        {
-            Debug.Log("Clicked on this gatherable: " + obj.name);
-        }
-    }
 
-    private void HandleGatherStart(GameObject obj)
+    }
+    private void HandlePlowFinish(GameObject obj)
     {
-        if (obj == this.gameObject)
-        {
-            Debug.Log("Gather has started on this object: " + obj.name);
-        }
+
+    }
+    private void HandleHarvestStart(GameObject obj)
+    {
+
+    }
+    private void HandleHarvestFinish(GameObject obj)
+    {
+
     }
 }
