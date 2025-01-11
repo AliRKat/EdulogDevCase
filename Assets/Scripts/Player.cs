@@ -1,22 +1,26 @@
+using System;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.AI;
 
 public class Player : MonoBehaviour
 {
-    private static Player instance;
+    public static Player Instance { get; private set; }
     private PlayerAnimator playerAnimator;
     private PlayerMovement playerMovement;
 
     private NavMeshAgent agent;
-    public static Player Instance
+    public event Action<GameObject> OnGatherStarted;
+
+    private void Awake()
     {
-        get
+        if (Instance != null && Instance != this)
         {
-            if (instance == null)
-            {
-                instance = new Player();
-            }
-            return instance;
+            Destroy(this);
+        }
+        else
+        {
+            Instance = this;
         }
     }
 
@@ -33,5 +37,11 @@ public class Player : MonoBehaviour
     void Update()
     {
         playerAnimator.UpdateMovement(agent.velocity.magnitude);
+    }
+
+    public void PlayerArrivedGatherable(GameObject gatherable)
+    {
+        Debug.Log("Player has arrived to this gatherable: " + gatherable.name);
+        OnGatherStarted?.Invoke(gatherable);
     }
 }

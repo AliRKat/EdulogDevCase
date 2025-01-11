@@ -16,6 +16,7 @@ public class GatherableTree : MonoBehaviour, IInteractable
         }
 
         GameManager.Instance.OnInteractableClicked += HandleClickEvent;
+        Player.Instance.OnGatherStarted += HandleGatherStart;
     }
 
     public void Highlight()
@@ -36,6 +37,17 @@ public class GatherableTree : MonoBehaviour, IInteractable
 
     public void HandleClickEvent(GameObject obj)
     {
-        Debug.Log("Tree gathered! " + obj.name);
+        if(obj == this.gameObject)
+        {
+            Debug.Log("Clicked on this gatherable: " + obj.name);
+        }
+    }
+
+    private void HandleGatherStart(GameObject obj)
+    {
+        if (obj == this.gameObject)
+        {
+            Debug.Log("Gather has started on this object: " + obj.name);
+        }
     }
 }

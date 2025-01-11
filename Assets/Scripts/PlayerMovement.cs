@@ -54,9 +54,8 @@ public class PlayerMovement : MonoBehaviour
             {
                 if (!agent.hasPath || agent.velocity.sqrMagnitude == 0f)
                 {
-                    Debug.Log("Player reached the target: " + GameManager.Instance.GetSelectedObj().name);
+                    Player.Instance.PlayerArrivedGatherable(GameManager.Instance.GetSelectedObj());
                     GameManager.Instance.ClearSelectedObj();
-                    // fire player reached to target event here
                 }
             }
         }

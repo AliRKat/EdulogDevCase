@@ -3,24 +3,23 @@ using UnityEngine;
 
 public class GameManager : MonoBehaviour
 {
-    public static GameManager Instance;
+    public static GameManager Instance { get; private set; }
     public event Action<GameObject> OnInteractableClicked;
 
     private GameObject SelectedObject;
     private Camera mainCamera;
     private GameObject lastHoveredObject;
 
-    void Awake()
+    private void Awake()
     {
-        if (Instance == null)
+        if (Instance != null && Instance != this)
         {
-            Instance = this;
+            Destroy(this);
         }
         else
         {
-            Destroy(gameObject);
+            Instance = this;
         }
-
         mainCamera = Camera.main;
     }
 
