@@ -53,6 +53,7 @@ public class PlayerMovement : MonoBehaviour
                 {
                     Debug.Log("Player reached the target: " + GameManager.Instance.GetSelectedObj().name);
                     GameManager.Instance.ClearSelectedObj();
+                    // fire player reached to target event here
                 }
             }
         }

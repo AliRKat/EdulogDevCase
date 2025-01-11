@@ -4,7 +4,7 @@ using UnityEngine;
 public class GameManager : MonoBehaviour
 {
     public static GameManager Instance;
-    public event Action<GameObject> OnGatherableClicked;
+    public event Action<GameObject> OnInteractableClicked;
 
     private GameObject SelectedObject;
     private Camera mainCamera;
@@ -37,11 +37,11 @@ public class GameManager : MonoBehaviour
         if (Physics.Raycast(ray, out hit))
         {
             GameObject hoveredObject = hit.collider.gameObject;
-            IGatherable gatherable = hoveredObject.GetComponent<IGatherable>();
+            IInteractable interactable = hoveredObject.GetComponent<IInteractable>();
 
-            if (gatherable != null)
+            if (interactable != null)
             {
-                Highlight(hoveredObject, gatherable);
+                Highlight(hoveredObject, interactable);
             }
             else
             {
@@ -65,7 +65,7 @@ public class GameManager : MonoBehaviour
     void SelectObject(GameObject obj)
     {
         SelectedObject = obj;
-        OnGatherableClicked?.Invoke(obj);
+        OnInteractableClicked?.Invoke(obj);
     }
 
     public GameObject GetSelectedObj()
@@ -78,15 +78,15 @@ public class GameManager : MonoBehaviour
         SelectedObject = null;
     }
 
-    void Highlight(GameObject hoveredObject, IGatherable gatherable)
+    void Highlight(GameObject hoveredObject, IInteractable interactable)
     {
         if (hoveredObject != lastHoveredObject)
         {
             if (lastHoveredObject != null)
             {
-                gatherable.ResetHighlight();
+                interactable.ResetHighlight();
             }
-            gatherable.Highlight();
+            interactable.Highlight();
             lastHoveredObject = hoveredObject;
         }
 
@@ -100,10 +100,10 @@ public class GameManager : MonoBehaviour
     {
         if (lastHoveredObject != null)
         {
-            IGatherable gatherable = lastHoveredObject.GetComponent<IGatherable>();
-            if (gatherable != null)
+            IInteractable interactable = lastHoveredObject.GetComponent<IInteractable>();
+            if (interactable != null)
             {
-                gatherable.ResetHighlight();
+                interactable.ResetHighlight();
             }
         }
     }

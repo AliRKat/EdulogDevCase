@@ -1,4 +1,4 @@
-public interface IGatherable 
+public interface IInteractable 
 { 
     void Highlight();
     void ResetHighlight();

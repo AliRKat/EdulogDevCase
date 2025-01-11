@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class GatherableTree : MonoBehaviour, IGatherable
+public class GatherableTree : MonoBehaviour, IInteractable
 {
     private Material originalMaterial;
     public Material highlightMaterial;
@@ -15,7 +15,7 @@ public class GatherableTree : MonoBehaviour, IGatherable
             originalMaterial = _renderer.material;
         }
 
-        GameManager.Instance.OnGatherableClicked += HandleGatherEvent;
+        GameManager.Instance.OnInteractableClicked += HandleClickEvent;
     }
 
     public void Highlight()
@@ -34,7 +34,7 @@ public class GatherableTree : MonoBehaviour, IGatherable
         }
     }
 
-    public void HandleGatherEvent(GameObject obj)
+    public void HandleClickEvent(GameObject obj)
     {
         Debug.Log("Tree gathered! " + obj.name);
     }
