@@ -14,14 +14,6 @@ public class Gatherable : MonoBehaviour, IInteractable
     private int harvestXpAmount;
     private int harvestAmount;
 
-    private void OnDisable()
-    {
-        Player.Instance.OnPlowStart -= HandlePlowStart;
-        Player.Instance.OnPlowFinish -= HandlePlowFinish;
-        Player.Instance.OnHarvestStart -= HandleHarvestStart;
-        Player.Instance.OnHarvestFinish -= HandleHarvestFinish;
-    }
-
     void Start()
     {
         _renderer = GetComponent<Renderer>();
@@ -46,6 +38,7 @@ public class Gatherable : MonoBehaviour, IInteractable
         Player.Instance.OnHarvestStart += HandleHarvestStart;
         Player.Instance.OnHarvestFinish += HandleHarvestFinish;
     }
+    #region Highlight Logic
     public void Highlight()
     {
         if (_renderer != null)
@@ -53,7 +46,6 @@ public class Gatherable : MonoBehaviour, IInteractable
             _renderer.material = highlightMaterial;
         }
     }
-
     public void ResetHighlight()
     {
         if (_renderer != null)
@@ -61,6 +53,7 @@ public class Gatherable : MonoBehaviour, IInteractable
             _renderer.material = originalMaterial;
         }
     }
+    #endregion
     #region Getters
     public float GetPlowTime()
     {
@@ -87,13 +80,14 @@ public class Gatherable : MonoBehaviour, IInteractable
         return state;
     }
     #endregion
-    #region EventHandlers
+    #region Event Handlers
     // Listens 'Player' class' OnPlowStart event 
     private void HandlePlowStart(GameObject obj)
     {
         if (obj == this.gameObject) 
         {
             // FX and other visuals related to Gatherable will be handled here
+            // switch states in here
             Debug.Log("Gatherable: Handling plow start");
         }
     }
@@ -103,6 +97,7 @@ public class Gatherable : MonoBehaviour, IInteractable
         if (obj == this.gameObject)
         {
             // FX and other visuals related to Gatherable will be handled here
+            // switch states in here
             Debug.Log("Gatherable: Handling plow finish");
         }
     }
@@ -112,6 +107,7 @@ public class Gatherable : MonoBehaviour, IInteractable
         if (obj == this.gameObject)
         {
             // FX and other visuals related to Gatherable will be handled here
+            // switch states in here
             Debug.Log("Gatherable: Handling harvest start");
         }
     }
@@ -121,8 +117,16 @@ public class Gatherable : MonoBehaviour, IInteractable
         if (obj == this.gameObject)
         {
             // FX and other visuals related to Gatherable will be handled here
+            // switch states in here
             Debug.Log("Gatherable: Handling harvest finish");
         }
     }
     #endregion
+    private void OnDisable()
+    {
+        Player.Instance.OnPlowStart -= HandlePlowStart;
+        Player.Instance.OnPlowFinish -= HandlePlowFinish;
+        Player.Instance.OnHarvestStart -= HandleHarvestStart;
+        Player.Instance.OnHarvestFinish -= HandleHarvestFinish;
+    }
 }

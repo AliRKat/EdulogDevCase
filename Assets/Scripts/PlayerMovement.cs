@@ -16,6 +16,7 @@ public class PlayerMovement : MonoBehaviour
     {
         if (Player.Instance.IsPlayerBusy())
         {
+            GameManager.Instance.ClearSelectedObj();
             return;
         }
 

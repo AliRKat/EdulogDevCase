@@ -21,6 +21,7 @@ public class PlayerGathering : MonoBehaviour
         if (currentGatherable == null)
         {
             Debug.LogWarning("PlayerGathering: The object doesn't have a Gatherable component!");
+            OnInteractionEnd?.Invoke(null, GatherableStates.Gatherable);
             return;
         }
 
@@ -36,6 +37,7 @@ public class PlayerGathering : MonoBehaviour
 
             case GatherableStates.Growing:
                 Debug.Log("PlayerGathering: Nothing to do with a Growing object: " + gatherable.name);
+                OnInteractionEnd?.Invoke(currentGatherable.gameObject, GatherableStates.Growing);
                 break;
 
             default:

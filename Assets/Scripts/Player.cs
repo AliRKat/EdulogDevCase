@@ -16,6 +16,7 @@ public class Player : MonoBehaviour
     private NavMeshAgent agent;
     private bool isBusy;
 
+    // singleton logic
     private void Awake()
     {
         if (Instance != null && Instance != this)
