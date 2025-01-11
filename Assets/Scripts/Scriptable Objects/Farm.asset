@@ -17,3 +17,5 @@ MonoBehaviour:
   plowTime: 3
   growTime: 3
   harvestTime: 3
+  harvestXPAmount: 9
+  harvestAmount: 4

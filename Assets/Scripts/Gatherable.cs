@@ -3,14 +3,16 @@ using UnityEngine;
 public class Gatherable : MonoBehaviour, IInteractable
 {
     public GatherableSO gatherableData;
-    public GatherableStates state;
-    public float plowTime;
-    public float growTime;
-    public float harvestTime;
     public Material highlightMaterial;
 
     private Material originalMaterial;
     private Renderer _renderer;
+    private GatherableStates state;
+    private float plowTime;
+    private float growTime;
+    private float harvestTime;
+    private int harvestXpAmount;
+    private int harvestAmount;
 
     private void OnDisable()
     {
@@ -32,13 +34,18 @@ public class Gatherable : MonoBehaviour, IInteractable
         growTime = gatherableData.growTime;
         harvestTime = gatherableData.harvestTime;
         state = gatherableData.state;
+        harvestXpAmount = gatherableData.harvestXPAmount;
+        harvestAmount = gatherableData.harvestAmount;
 
+        SubscribeToPlayerEvents();
+    }
+    public void SubscribeToPlayerEvents()
+    {
         Player.Instance.OnPlowStart += HandlePlowStart;
         Player.Instance.OnPlowFinish += HandlePlowFinish;
         Player.Instance.OnHarvestStart += HandleHarvestStart;
         Player.Instance.OnHarvestFinish += HandleHarvestFinish;
     }
-
     public void Highlight()
     {
         if (_renderer != null)
@@ -54,21 +61,68 @@ public class Gatherable : MonoBehaviour, IInteractable
             _renderer.material = originalMaterial;
         }
     }
-
+    #region Getters
+    public float GetPlowTime()
+    {
+        return plowTime;
+    }
+    public float GetGrowTime()
+    {
+        return growTime;
+    }
+    public float GetHarvestTime()
+    {
+        return harvestTime;
+    }
+    public float GetHarvestXpAmount()
+    {
+        return harvestXpAmount;
+    }
+    public float GetHarvestAmount()
+    {
+        return harvestAmount;
+    }
+    public GatherableStates GetCurrentState()
+    {
+        return state;
+    }
+    #endregion
+    #region EventHandlers
+    // Listens 'Player' class' OnPlowStart event 
     private void HandlePlowStart(GameObject obj)
     {
-
+        if (obj == this.gameObject) 
+        {
+            // FX and other visuals related to Gatherable will be handled here
+            Debug.Log("Oh my god plowing has started");
+        }
     }
+    // Listens 'Player' class' OnPlowFinish event 
     private void HandlePlowFinish(GameObject obj)
     {
-
+        if (obj == this.gameObject)
+        {
+            // FX and other visuals related to Gatherable will be handled here
+            Debug.Log("Oh my god plowing has ended");
+        }
     }
+    // Listens 'Player' class' OnHarvestStart event 
     private void HandleHarvestStart(GameObject obj)
     {
-
+        if (obj == this.gameObject)
+        {
+            // FX and other visuals related to Gatherable will be handled here
+            Debug.Log("Oh my god harvest has started");
+        }
     }
+    // Listens 'Player' class' OnHarvestFinish event 
     private void HandleHarvestFinish(GameObject obj)
     {
-
+        if (obj == this.gameObject)
+        {
+            // FX and other visuals related to Gatherable will be handled here
+            Debug.Log("Oh my god harvest has ended");
+        }
     }
+    #endregion
 }

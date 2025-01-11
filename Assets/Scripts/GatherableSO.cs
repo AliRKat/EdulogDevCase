@@ -8,4 +8,6 @@ public class GatherableSO : ScriptableObject
     public float plowTime;
     public float growTime;
     public float harvestTime;
+    public int harvestXPAmount;
+    public int harvestAmount;
 }

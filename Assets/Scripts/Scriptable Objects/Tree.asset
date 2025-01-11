@@ -12,8 +12,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2bc0f2be08e4fbc4f8dead80dfe8dde9, type: 3}
   m_Name: Tree
   m_EditorClassIdentifier: 
-  state: 0
+  state: 2
   gatherableName: Tree
   plowTime: 4
   growTime: 4
   harvestTime: 4
+  harvestXPAmount: 10
+  harvestAmount: 5
