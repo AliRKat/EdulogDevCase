@@ -4,10 +4,9 @@ using UnityEngine;
 public class GameManager : MonoBehaviour
 {
     public static GameManager Instance;
-
-    public GameObject SelectedObject;
     public event Action<GameObject> OnGatherableClicked;
 
+    private GameObject SelectedObject;
     private Camera mainCamera;
     private GameObject lastHoveredObject;
 
@@ -67,6 +66,16 @@ public class GameManager : MonoBehaviour
     {
         SelectedObject = obj;
         OnGatherableClicked?.Invoke(obj);
+    }
+
+    public GameObject GetSelectedObj()
+    {
+        return SelectedObject;
+    }
+
+    public void ClearSelectedObj()
+    {
+        SelectedObject = null;
     }
 
     void Highlight(GameObject hoveredObject, IGatherable gatherable)

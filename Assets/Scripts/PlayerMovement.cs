@@ -14,7 +14,7 @@ public class PlayerMovement : MonoBehaviour
 
     void Update()
     {
-        if (GameManager.Instance.SelectedObject != null)
+        if (GameManager.Instance.GetSelectedObj() != null)
         {
             MoveToSelectedObject();
         }
@@ -40,11 +40,9 @@ public class PlayerMovement : MonoBehaviour
         }
     }
 
-    // GameManager.Instance.SelectedObject should not be able to used like this.
-    // Update this section
     private void MoveToSelectedObject()
     {
-        Vector3 targetPosition = GameManager.Instance.SelectedObject.transform.position;
+        Vector3 targetPosition = GameManager.Instance.GetSelectedObj().transform.position;
         agent.destination = targetPosition;
 
         if (!agent.pathPending)
@@ -53,8 +51,8 @@ public class PlayerMovement : MonoBehaviour
             {
                 if (!agent.hasPath || agent.velocity.sqrMagnitude == 0f)
                 {
-                    Debug.Log("Player reached the target: " + GameManager.Instance.SelectedObject.name);
-                    GameManager.Instance.SelectedObject = null;
+                    Debug.Log("Player reached the target: " + GameManager.Instance.GetSelectedObj().name);
+                    GameManager.Instance.ClearSelectedObj();
                 }
             }
         }
