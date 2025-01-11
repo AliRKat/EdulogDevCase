@@ -1,0 +1,1 @@
+public enum GatherableStates { Plowable, Growing, Gatherable }

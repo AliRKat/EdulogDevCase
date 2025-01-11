@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class GatherableTree : MonoBehaviour, IInteractable
+public class Gatherable : MonoBehaviour, IInteractable
 {
     private Material originalMaterial;
     public Material highlightMaterial;
