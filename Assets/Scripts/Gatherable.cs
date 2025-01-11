@@ -94,7 +94,7 @@ public class Gatherable : MonoBehaviour, IInteractable
         if (obj == this.gameObject) 
         {
             // FX and other visuals related to Gatherable will be handled here
-            Debug.Log("Oh my god plowing has started");
+            Debug.Log("Gatherable: Handling plow start");
         }
     }
     // Listens 'Player' class' OnPlowFinish event 
@@ -103,7 +103,7 @@ public class Gatherable : MonoBehaviour, IInteractable
         if (obj == this.gameObject)
         {
             // FX and other visuals related to Gatherable will be handled here
-            Debug.Log("Oh my god plowing has ended");
+            Debug.Log("Gatherable: Handling plow finish");
         }
     }
     // Listens 'Player' class' OnHarvestStart event 
@@ -112,7 +112,7 @@ public class Gatherable : MonoBehaviour, IInteractable
         if (obj == this.gameObject)
         {
             // FX and other visuals related to Gatherable will be handled here
-            Debug.Log("Oh my god harvest has started");
+            Debug.Log("Gatherable: Handling harvest start");
         }
     }
     // Listens 'Player' class' OnHarvestFinish event 
@@ -121,7 +121,7 @@ public class Gatherable : MonoBehaviour, IInteractable
         if (obj == this.gameObject)
         {
             // FX and other visuals related to Gatherable will be handled here
-            Debug.Log("Oh my god harvest has ended");
+            Debug.Log("Gatherable: Handling harvest finish");
         }
     }
     #endregion

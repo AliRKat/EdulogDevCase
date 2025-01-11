@@ -11,11 +11,16 @@ public class PlayerGathering : MonoBehaviour
     // takes the interactable game object and depending on the gatherable state of it starts an action like plow or gather
     public void HandleGatherableInteraction(GameObject gatherable)
     {
+        if (Player.Instance.IsPlayerBusy())
+        {
+            return;
+        }
+
         currentGatherable = gatherable.GetComponent<Gatherable>();
 
         if (currentGatherable == null)
         {
-            Debug.LogWarning("The object doesn't have a Gatherable component!");
+            Debug.LogWarning("PlayerGathering: The object doesn't have a Gatherable component!");
             return;
         }
 
@@ -30,11 +35,11 @@ public class PlayerGathering : MonoBehaviour
                 break;
 
             case GatherableStates.Growing:
-                Debug.Log("Nothing to do with a Growing object: " + gatherable.name);
+                Debug.Log("PlayerGathering: Nothing to do with a Growing object: " + gatherable.name);
                 break;
 
             default:
-                Debug.Log("Unknown object state: " + gatherable.name);
+                Debug.Log("PlayerGathering: Unknown object state: " + gatherable.name);
                 break;
         }
     }
@@ -42,25 +47,25 @@ public class PlayerGathering : MonoBehaviour
     // do not use this methods or listen to these events to notify another class, use the one on the 'Player'
     private void StartGathering(GameObject gatherable)
     {
-        Debug.Log("Starting to gather from: " + gatherable.name);
+        Debug.Log("PlayerGathering: Starting to gather from: " + gatherable.name);
         OnInteractionStart?.Invoke(gatherable, GatherableStates.Gatherable);
         StartCoroutine(GatherCoroutine(gatherable));
     }
     private void StartPlowing(GameObject plowable)
     {
-        Debug.Log("Starting to plow: " + plowable.name);
+        Debug.Log("PlayerGathering: Starting to plow: " + plowable.name);
         OnInteractionStart?.Invoke(plowable, GatherableStates.Plowable);
         StartCoroutine(PlowCoroutine(plowable));
     }
     private void StopGathering()
     {
-        Debug.Log("Gathering process stopped.");
+        Debug.Log("PlayerGathering: Gathering process stopped.");
         OnInteractionEnd?.Invoke(currentGatherable.gameObject, GatherableStates.Gatherable);
         currentGatherable = null;
     }
     private void StopPlowing()
     {
-        Debug.Log("Plowing process stopped.");
+        Debug.Log("PlayerGathering: Plowing process stopped.");
         OnInteractionEnd?.Invoke(currentGatherable.gameObject, GatherableStates.Plowable);
         currentGatherable = null;
     }
@@ -68,14 +73,14 @@ public class PlayerGathering : MonoBehaviour
     private IEnumerator GatherCoroutine(GameObject gatherable)
     {
         yield return new WaitForSeconds(5f);
-        Debug.Log("Finished gathering: " + gatherable.name);
+        Debug.Log("PlayerGathering: Finished gathering: " + gatherable.name);
         StopGathering();
     }
 
     private IEnumerator PlowCoroutine(GameObject plowable)
     {
         yield return new WaitForSeconds(5f);
-        Debug.Log("Finished plowing: " + plowable.name);
+        Debug.Log("PlayerGathering: Finished plowing: " + plowable.name);
         StopPlowing();
     }
 }

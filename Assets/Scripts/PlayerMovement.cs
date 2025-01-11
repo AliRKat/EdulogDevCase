@@ -14,6 +14,11 @@ public class PlayerMovement : MonoBehaviour
 
     void Update()
     {
+        if (Player.Instance.IsPlayerBusy())
+        {
+            return;
+        }
+
         if (GameManager.Instance.GetSelectedObj() != null)
         {
             MoveToSelectedObject();

@@ -14,6 +14,7 @@ public class Player : MonoBehaviour
     private PlayerMovement playerMovement;
     private PlayerGathering playerGathering;
     private NavMeshAgent agent;
+    private bool isBusy;
 
     private void Awake()
     {
@@ -47,6 +48,12 @@ public class Player : MonoBehaviour
     public void PlayerArrivedGatherable(GameObject gatherable)
     {
         playerGathering.HandleGatherableInteraction(gatherable);
+        isBusy = true;
+    }
+
+    public bool IsPlayerBusy()
+    {
+        return isBusy;
     }
 
     private void SubscribeToGatheringEvents()
@@ -104,5 +111,6 @@ public class Player : MonoBehaviour
                 Debug.Log("Player: Unknown interaction finished.");
                 break;
         }
+        isBusy = false;
     }
 }
