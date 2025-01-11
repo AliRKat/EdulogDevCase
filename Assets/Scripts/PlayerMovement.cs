@@ -7,7 +7,7 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] Animator animator;
     private NavMeshAgent agent;
 
-    void Start()
+    void Awake()
     {
         agent = GetComponent<NavMeshAgent>();
     }
@@ -25,8 +25,11 @@ public class PlayerMovement : MonoBehaviour
                 MoveToCursor();
             }
         }
+    }
 
-        UpdateAnimator();
+    public NavMeshAgent GetMovementAgent()
+    {
+        return agent;
     }
 
     private void MoveToCursor()
@@ -58,13 +61,6 @@ public class PlayerMovement : MonoBehaviour
             }
         }
         RotateTowardsTarget(targetPosition);
-    }
-
-    // Animator should get its own logic
-    private void UpdateAnimator()
-    {
-        float speed = agent.velocity.magnitude;
-        animator.SetFloat("forwardSpeed", speed);
     }
 
     private void RotateTowardsTarget(Vector3 targetPosition)
