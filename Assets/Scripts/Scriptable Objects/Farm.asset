@@ -13,9 +13,10 @@ MonoBehaviour:
   m_Name: Farm
   m_EditorClassIdentifier: 
   state: 0
-  gatherableName: TestFarm
+  gatherableName: Farm
   plowTime: 3
   growTime: 3
   harvestTime: 3
   harvestXPAmount: 9
   harvestAmount: 4
+  gatherItemValue: 5

@@ -8,12 +8,14 @@ public class Gatherable : MonoBehaviour, IInteractable
 
     private Material originalMaterial;
     private Renderer _renderer;
-    [SerializeField] private GatherableStates state;
+    private GatherableStates state;
     private float plowTime;
     private float growTime;
     private float harvestTime;
     private int harvestXpAmount;
     private int harvestAmount;
+    private int gatherItemValue;
+    private ItemBase itemToGather;
 
     void Start()
     {
@@ -29,7 +31,9 @@ public class Gatherable : MonoBehaviour, IInteractable
         state = gatherableData.state;
         harvestXpAmount = gatherableData.harvestXPAmount;
         harvestAmount = gatherableData.harvestAmount;
+        gatherItemValue = gatherableData.gatherItemValue;
 
+        itemToGather = new(gatherableData.name, gatherItemValue);
         SubscribeToPlayerEvents();
     }
     public void SubscribeToPlayerEvents()
@@ -68,17 +72,22 @@ public class Gatherable : MonoBehaviour, IInteractable
     {
         return harvestTime;
     }
-    public float GetHarvestXpAmount()
+    public int GetHarvestXpAmount()
     {
         return harvestXpAmount;
     }
-    public float GetHarvestAmount()
+    public int GetHarvestAmount()
     {
         return harvestAmount;
     }
     public GatherableStates GetCurrentState()
     {
         return state;
+    }
+
+    public ItemBase GetGatherItem()
+    {
+        return itemToGather;
     }
     #endregion
     #region Event Handlers

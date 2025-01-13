@@ -9,10 +9,12 @@ public class Player : MonoBehaviour
     public event Action<GameObject> OnPlowFinish;
     public event Action<GameObject> OnHarvestStart;
     public event Action<GameObject> OnHarvestFinish;
+    public event Action OnInventoryUpdated;
 
     private PlayerAnimator playerAnimator;
     private PlayerMovement playerMovement;
     private PlayerGathering playerGathering;
+    private PlayerInventory playerInventory;
     private NavMeshAgent agent;
     private bool isBusy;
 
@@ -35,9 +37,10 @@ public class Player : MonoBehaviour
         playerAnimator = GetComponent<PlayerAnimator>();
         playerMovement = GetComponent<PlayerMovement>();
         playerGathering = GetComponent<PlayerGathering>();
+        playerInventory = GetComponent<PlayerInventory>();
         agent = playerMovement.GetMovementAgent();
 
-        SubscribeToGatheringEvents();
+        SubscribeToServiceEvents();
     }
 
     void Update()
@@ -60,10 +63,16 @@ public class Player : MonoBehaviour
         return isBusy;
     }
 
-    private void SubscribeToGatheringEvents()
+    private void SubscribeToServiceEvents()
     {
         playerGathering.OnInteractionStart += HandleInteractionStart;
         playerGathering.OnInteractionEnd += HandleInteractionEnd;
+        playerInventory.InventoryUpdated += HandleInventoryUpdate;
+    }
+
+    private void HandleInventoryUpdate()
+    {
+        OnInventoryUpdated?.Invoke();
     }
 
     // invokes related start events depending on the state of the gatherable
