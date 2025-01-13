@@ -49,7 +49,10 @@ public class Player : MonoBehaviour
     public void PlayerArrivedGatherable(GameObject gatherable)
     {
         playerGathering.HandleGatherableInteraction(gatherable);
-        isBusy = true;
+        if(gatherable.GetComponent<Gatherable>().GetCurrentState() != GatherableStates.Growing)
+        {
+            isBusy = true;
+        }
     }
 
     public bool IsPlayerBusy()
@@ -81,6 +84,7 @@ public class Player : MonoBehaviour
 
             case GatherableStates.Growing:
                 Debug.Log("Player: Currently won't do anything related to growing.");
+                isBusy = false;
                 break;
 
             default:

@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 
 public class Gatherable : MonoBehaviour, IInteractable
@@ -7,7 +8,7 @@ public class Gatherable : MonoBehaviour, IInteractable
 
     private Material originalMaterial;
     private Renderer _renderer;
-    private GatherableStates state;
+    [SerializeField] private GatherableStates state;
     private float plowTime;
     private float growTime;
     private float harvestTime;
@@ -84,30 +85,38 @@ public class Gatherable : MonoBehaviour, IInteractable
     // Listens 'Player' class' OnPlowStart event 
     private void HandlePlowStart(GameObject obj)
     {
-        if (obj == this.gameObject) 
+        if (obj == this.gameObject && state != GatherableStates.Growing)
         {
             // FX and other visuals related to Gatherable will be handled here
-            // switch states in here
             Debug.Log("Gatherable: Handling plow start");
         }
     }
+
+    private IEnumerator GrowCoroutine(Gatherable obj, float time, GatherableStates state)
+    {
+        yield return new WaitForSeconds(time);
+        SwitchState(obj, state);
+    }
+
     // Listens 'Player' class' OnPlowFinish event 
     private void HandlePlowFinish(GameObject obj)
     {
         if (obj == this.gameObject)
         {
-            // FX and other visuals related to Gatherable will be handled here
-            // switch states in here
+            // FX and other visuals related to Gatherable will be handled
+            Gatherable gatherableObj = obj.GetComponent<Gatherable>();
             Debug.Log("Gatherable: Handling plow finish");
+            SwitchState(gatherableObj, GatherableStates.Growing);
+            StartCoroutine(GrowCoroutine(gatherableObj, growTime, GatherableStates.Gatherable));
         }
     }
+
     // Listens 'Player' class' OnHarvestStart event 
     private void HandleHarvestStart(GameObject obj)
     {
         if (obj == this.gameObject)
         {
             // FX and other visuals related to Gatherable will be handled here
-            // switch states in here
             Debug.Log("Gatherable: Handling harvest start");
         }
     }
@@ -117,10 +126,17 @@ public class Gatherable : MonoBehaviour, IInteractable
         if (obj == this.gameObject)
         {
             // FX and other visuals related to Gatherable will be handled here
-            // switch states in here
+            Gatherable gatherableObj = obj.GetComponent<Gatherable>();
             Debug.Log("Gatherable: Handling harvest finish");
+            SwitchState(gatherableObj, GatherableStates.Plowable);
         }
     }
+
+    private void SwitchState(Gatherable obj, GatherableStates state)
+    {
+        obj.state = state;
+    }
+
     #endregion
     private void OnDisable()
     {

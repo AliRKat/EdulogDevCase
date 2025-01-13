@@ -61,13 +61,13 @@ public class PlayerGathering : MonoBehaviour
     }
     private void StopGathering()
     {
-        Debug.Log("PlayerGathering: Gathering process stopped.");
+        Debug.Log("PlayerGathering: Gathering process completed.");
         OnInteractionEnd?.Invoke(currentGatherable.gameObject, GatherableStates.Gatherable);
         currentGatherable = null;
     }
     private void StopPlowing()
     {
-        Debug.Log("PlayerGathering: Plowing process stopped.");
+        Debug.Log("PlayerGathering: Plowing process completed.");
         OnInteractionEnd?.Invoke(currentGatherable.gameObject, GatherableStates.Plowable);
         currentGatherable = null;
     }
