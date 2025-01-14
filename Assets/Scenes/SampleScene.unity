@@ -351,10 +351,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   gatherableData: {fileID: 11400000, guid: dec996cf29e44304e9c3a9eb94a875ff, type: 2}
-  state: 0
-  plowTime: 0
-  growTime: 0
-  harvestTime: 0
   highlightMaterial: {fileID: 2100000, guid: 81e64ec216e6d014b80d1fa6192d01a0, type: 2}
 --- !u!64 &1730948239
 MeshCollider:
@@ -456,10 +452,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   gatherableData: {fileID: 11400000, guid: dec996cf29e44304e9c3a9eb94a875ff, type: 2}
-  state: 0
-  plowTime: 0
-  growTime: 0
-  harvestTime: 0
   highlightMaterial: {fileID: 2100000, guid: 81e64ec216e6d014b80d1fa6192d01a0, type: 2}
 --- !u!1 &2018699522
 GameObject:
@@ -790,10 +782,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   gatherableData: {fileID: 11400000, guid: 20d3468de15c7694fb72fbd928221681, type: 2}
-  state: 0
-  plowTime: 0
-  growTime: 0
-  harvestTime: 0
   highlightMaterial: {fileID: 2100000, guid: 81e64ec216e6d014b80d1fa6192d01a0, type: 2}
 --- !u!64 &64809619829573378
 MeshCollider:

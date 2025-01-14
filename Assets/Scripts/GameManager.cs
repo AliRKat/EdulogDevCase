@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class GameManager : MonoBehaviour
@@ -105,5 +106,22 @@ public class GameManager : MonoBehaviour
                 interactable.ResetHighlight();
             }
         }
+    }
+
+    private void OnApplicationQuit()
+    {
+        var allGatherables = FindObjectsOfType<Gatherable>();
+        List<GatherableData> gatherableDataList = new List<GatherableData>();
+
+        foreach (var gatherable in allGatherables)
+        {
+            gatherableDataList.Add(new GatherableData
+            {
+                Id = gatherable.GetUniqueId(),
+                State = gatherable.GetCurrentState()
+            });
+        }
+
+        SaveManager.SaveGatherables(gatherableDataList);
     }
 }

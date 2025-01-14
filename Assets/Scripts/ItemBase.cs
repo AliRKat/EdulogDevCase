@@ -1,3 +1,5 @@
+using System;
+
 public class ItemBase
 {
     public string Name { get; set; }
@@ -15,5 +17,19 @@ public class ItemBase
     public string ItemBaseToString()
     {
         return $"item name: {Name}, value: {Value}";
+    }
+
+    public override bool Equals(object obj)
+    {
+        if (obj is ItemBase other)
+        {
+            return Name == other.Name && Value == other.Value;
+        }
+        return false;
+    }
+
+    public override int GetHashCode()
+    {
+        return HashCode.Combine(Name, Value);
     }
 }

@@ -12,7 +12,12 @@ public class PlayerInventory : MonoBehaviour
 
     private void Start()
     {
-        SubscribeToPlayerEvents();    
+        SubscribeToPlayerEvents();
+        LogTheInventory();
+    }
+    public void OnEnable()
+    {
+        inventory = SaveManager.LoadInventory();
     }
 
     private void OnDisable()
@@ -45,6 +50,7 @@ public class PlayerInventory : MonoBehaviour
         }
 
         InventoryUpdated?.Invoke();
+        SaveManager.SaveInventory(inventory);
     }
 
     public bool RemoveItem(ItemBase item, int quantity)
@@ -58,6 +64,7 @@ public class PlayerInventory : MonoBehaviour
             }
 
             InventoryUpdated?.Invoke();
+            SaveManager.SaveInventory(inventory);
             return true;
         }
 
@@ -69,7 +76,7 @@ public class PlayerInventory : MonoBehaviour
     {
         foreach (var item in inventory)
         {
-            Debug.Log(item.Key.ItemBaseToString());
+            Debug.Log($"{item.Key.ItemBaseToString()}, quantity: {item.Value}");
         }
     }
 }

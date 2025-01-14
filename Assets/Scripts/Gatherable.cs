@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using UnityEngine;
 
@@ -8,7 +9,7 @@ public class Gatherable : MonoBehaviour, IInteractable
 
     private Material originalMaterial;
     private Renderer _renderer;
-    private GatherableStates state;
+    [SerializeField] private GatherableStates state; // serializing for debug purposes
     private float plowTime;
     private float growTime;
     private float harvestTime;
@@ -16,6 +17,7 @@ public class Gatherable : MonoBehaviour, IInteractable
     private int harvestAmount;
     private int gatherItemValue;
     private ItemBase itemToGather;
+    private string gatherableId;
 
     void Start()
     {
@@ -34,6 +36,8 @@ public class Gatherable : MonoBehaviour, IInteractable
         gatherItemValue = gatherableData.gatherItemValue;
 
         itemToGather = new(gatherableData.name, gatherItemValue);
+        gatherableId = gatherableData.name + "_" + transform.position.ToString();
+        LoadState();
         SubscribeToPlayerEvents();
     }
     public void SubscribeToPlayerEvents()
@@ -43,6 +47,48 @@ public class Gatherable : MonoBehaviour, IInteractable
         Player.Instance.OnHarvestStart += HandleHarvestStart;
         Player.Instance.OnHarvestFinish += HandleHarvestFinish;
     }
+    public string GetUniqueId()
+    {
+        return gatherableId;
+    }
+
+    #region State Handlers
+    private void LoadState()
+    {
+        var savedGatherables = SaveManager.LoadGatherables();
+        var savedData = savedGatherables.Find(g => g.Id == gatherableId);
+        state = savedData != null ? savedData.State : gatherableData.state;
+
+        if(state == GatherableStates.Growing)
+        {
+            StartCoroutine(GrowCoroutine(this.gameObject.GetComponent<Gatherable>(), growTime, GatherableStates.Gatherable));
+        }
+    }
+
+    private void SaveState()
+    {
+        var savedGatherables = SaveManager.LoadGatherables();
+        var gatherableData = savedGatherables.Find(g => g.Id == gatherableId);
+
+        if (gatherableData != null)
+        {
+            gatherableData.State = state;
+        }
+        else
+        {
+            savedGatherables.Add(new GatherableData { Id = gatherableId, State = state });
+        }
+
+        SaveManager.SaveGatherables(savedGatherables);
+    }
+
+    private void SwitchState(Gatherable obj, GatherableStates state)
+    {
+        obj.state = state;
+        SaveState();
+    }
+    #endregion
+
     #region Highlight Logic
     public void Highlight()
     {
@@ -140,12 +186,6 @@ public class Gatherable : MonoBehaviour, IInteractable
             SwitchState(gatherableObj, GatherableStates.Plowable);
         }
     }
-
-    private void SwitchState(Gatherable obj, GatherableStates state)
-    {
-        obj.state = state;
-    }
-
     #endregion
     private void OnDisable()
     {
