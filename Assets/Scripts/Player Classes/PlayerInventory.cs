@@ -11,7 +11,7 @@ public class PlayerInventory : MonoBehaviour
     private Dictionary<ItemBase, int> inventory = new Dictionary<ItemBase, int>();
 
     // Base capacity of the player, starting from a default value
-    private int baseCapacity = 50; // Default starting value, can be changed with level
+    private int baseCapacity = 50;
     // Bonus capacity is dynamically managed
     private int bonusCapacity = 0;
 
