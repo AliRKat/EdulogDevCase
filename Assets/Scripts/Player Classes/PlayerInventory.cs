@@ -76,7 +76,7 @@ public class PlayerInventory : MonoBehaviour
     {
         foreach (var item in inventory)
         {
-            Debug.Log($"{item.Key.ItemBaseToString()}, quantity: {item.Value}");
+            Debug.Log($"PlayerInventory: {item.Key.ItemBaseToString()}, quantity: {item.Value}");
         }
     }
 }

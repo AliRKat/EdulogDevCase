@@ -4,8 +4,9 @@ using System.IO;
 
 public class SaveManager
 {
-    private const string InventoryKey = "PlayerInventory";
     private static readonly string savePath = Application.persistentDataPath + "/gatherables.json";
+    private static readonly string playerDataPath = Application.persistentDataPath + "/playerData.json";
+    private static readonly string inventoryPath = Application.persistentDataPath + "/inventory.json";
 
     public static void SaveInventory(Dictionary<ItemBase, int> inventory)
     {
@@ -16,16 +17,20 @@ public class SaveManager
         }
 
         string json = JsonUtility.ToJson(new SerializableItemList(items));
-        PlayerPrefs.SetString(InventoryKey, json);
-        PlayerPrefs.Save();
+        File.WriteAllText(inventoryPath, json);
+
+        Debug.Log("SaveManager: Inventory saved!");
     }
 
     public static Dictionary<ItemBase, int> LoadInventory()
     {
-        if (!PlayerPrefs.HasKey(InventoryKey))
+        if (!File.Exists(inventoryPath))
+        {
+            Debug.LogWarning("No inventory data found. Returning an empty inventory.");
             return new Dictionary<ItemBase, int>();
+        }
 
-        string json = PlayerPrefs.GetString(InventoryKey);
+        string json = File.ReadAllText(inventoryPath);
         SerializableItemList itemList = JsonUtility.FromJson<SerializableItemList>(json);
 
         Dictionary<ItemBase, int> inventory = new Dictionary<ItemBase, int>();
@@ -55,6 +60,26 @@ public class SaveManager
         string json = File.ReadAllText(savePath);
         GatherableDataListWrapper gatherableDataList = JsonUtility.FromJson<GatherableDataListWrapper>(json);
         return gatherableDataList.Gatherables;
+    }
+
+    public static void SavePlayerData(PlayerData playerData)
+    {
+        string json = JsonUtility.ToJson(playerData);
+        File.WriteAllText(playerDataPath, json);
+        Debug.Log("SaveManager: Player data saved!");
+    }
+
+    public static PlayerData LoadPlayerData()
+    {
+        if (!File.Exists(playerDataPath))
+        {
+            Debug.LogWarning("SaveManager: No player data file found. Creating default data.");
+            return new PlayerData(1, 0);
+        }
+
+        string json = File.ReadAllText(playerDataPath);
+        PlayerData playerData = JsonUtility.FromJson<PlayerData>(json);
+        return playerData;
     }
 }
 
@@ -95,4 +120,17 @@ public class GatherableData
 public class GatherableDataListWrapper
 {
     public List<GatherableData> Gatherables;
+}
+
+[System.Serializable]
+public class PlayerData
+{
+    public int Level;
+    public int CurrentXP;
+
+    public PlayerData(int level, int currentXP)
+    {
+        Level = level;
+        CurrentXP = currentXP;
+    }
 }
