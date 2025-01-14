@@ -81,6 +81,47 @@ public class SaveManager
         PlayerData playerData = JsonUtility.FromJson<PlayerData>(json);
         return playerData;
     }
+
+    #region Clear-up methods for debug purposes
+    public static void ClearInventoryData()
+    {
+        if (File.Exists(inventoryPath))
+        {
+            File.Delete(inventoryPath);
+            Debug.Log("SaveManager: Inventory data has been cleared!");
+        }
+        else
+        {
+            Debug.LogWarning("SaveManager: No inventory file found to delete.");
+        }
+    }
+
+    public static void ClearXPProgressionData()
+    {
+        if (File.Exists(playerDataPath))
+        {
+            File.Delete(playerDataPath);
+            Debug.Log("SaveManager: XP Progression data has been cleared!");
+        }
+        else
+        {
+            Debug.LogWarning("SaveManager: No player data file found to delete.");
+        }
+    }
+
+    public static void ClearGatherableStateData()
+    {
+        if (File.Exists(savePath))
+        {
+            File.Delete(savePath);
+            Debug.Log("SaveManager: Gatherable state data has been cleared!");
+        }
+        else
+        {
+            Debug.LogWarning("SaveManager: No gatherables file found to delete.");
+        }
+    }
+    #endregion
 }
 
 [System.Serializable]
