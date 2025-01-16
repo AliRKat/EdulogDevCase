@@ -5,10 +5,6 @@ using UnityEngine;
 public class Gatherable : MonoBehaviour
 {
     public GatherableSO gatherableData;
-    public Material highlightMaterial;
-
-    private Material originalMaterial;
-    private Renderer _renderer;
     [SerializeField] private GatherableStates state; // serializing for debug purposes
     private float plowTime;
     private float growTime;
@@ -21,12 +17,6 @@ public class Gatherable : MonoBehaviour
 
     void Start()
     {
-        _renderer = GetComponent<Renderer>();
-        if (_renderer != null)
-        {
-            originalMaterial = _renderer.material;
-        }
-
         plowTime = gatherableData.plowTime;
         growTime = gatherableData.growTime;
         harvestTime = gatherableData.harvestTime;

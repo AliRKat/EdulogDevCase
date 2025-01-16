@@ -8,7 +8,7 @@ public class SaveManager
     private static readonly string playerDataPath = Application.persistentDataPath + "/playerData.json";
     private static readonly string inventoryPath = Application.persistentDataPath + "/inventory.json";
 
-    public static void SaveInventory(Dictionary<ItemBase, int> inventory)
+    public static void SaveInventory(Dictionary<ItemBase, int> inventory, int money)
     {
         List<SerializableItem> items = new List<SerializableItem>();
         foreach (var item in inventory)
@@ -16,30 +16,31 @@ public class SaveManager
             items.Add(new SerializableItem(item.Key.Name, item.Key.Value, item.Value));
         }
 
-        string json = JsonUtility.ToJson(new SerializableItemList(items));
+        SerializableInventory data = new SerializableInventory(items, money);
+        string json = JsonUtility.ToJson(data);
         File.WriteAllText(inventoryPath, json);
 
-        Debug.Log("SaveManager: Inventory saved!");
+        Debug.Log("SaveManager: Inventory and money saved!");
     }
 
-    public static Dictionary<ItemBase, int> LoadInventory()
+    public static (Dictionary<ItemBase, int>, int) LoadInventory()
     {
         if (!File.Exists(inventoryPath))
         {
-            Debug.LogWarning("No inventory data found. Returning an empty inventory.");
-            return new Dictionary<ItemBase, int>();
+            Debug.LogWarning("No inventory data found. Returning an empty inventory and zero money.");
+            return (new Dictionary<ItemBase, int>(), 0);
         }
 
         string json = File.ReadAllText(inventoryPath);
-        SerializableItemList itemList = JsonUtility.FromJson<SerializableItemList>(json);
+        SerializableInventory data = JsonUtility.FromJson<SerializableInventory>(json);
 
         Dictionary<ItemBase, int> inventory = new Dictionary<ItemBase, int>();
-        foreach (var item in itemList.Items)
+        foreach (var item in data.Items)
         {
             inventory.Add(new ItemBase(item.Name, item.Value), item.Quantity);
         }
 
-        return inventory;
+        return (inventory, data.Money);
     }
 
     public static void SaveGatherables(List<GatherableData> gatherableDataList)
@@ -140,13 +141,15 @@ public class SerializableItem
 }
 
 [System.Serializable]
-public class SerializableItemList
+public class SerializableInventory
 {
     public List<SerializableItem> Items;
+    public int Money;
 
-    public SerializableItemList(List<SerializableItem> items)
+    public SerializableInventory(List<SerializableItem> items, int money)
     {
         Items = items;
+        Money = money;
     }
 }
 

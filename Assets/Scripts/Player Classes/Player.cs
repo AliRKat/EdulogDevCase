@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -76,6 +77,11 @@ public class Player : MonoBehaviour
     public void SetPlayerFree()
     {
         isBusy = false;
+    }
+
+    public Dictionary<ItemBase, int> GetPlayerInventory()
+    {
+        return playerInventory.inventory;
     }
 
     private void SubscribeToServiceEvents()

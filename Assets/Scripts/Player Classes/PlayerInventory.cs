@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine;
+using static UnityEditor.Progress;
 
 public class PlayerInventory : MonoBehaviour
 {
@@ -8,12 +9,14 @@ public class PlayerInventory : MonoBehaviour
     // However I think structure-wise, 'Player' class notifiying listeners makes more sense
     public event Action InventoryUpdated;
 
-    private Dictionary<ItemBase, int> inventory = new Dictionary<ItemBase, int>();
+    internal Dictionary<ItemBase, int> inventory = new Dictionary<ItemBase, int>();
 
     // Base capacity of the player, starting from a default value
     private int baseCapacity = 50;
     // Bonus capacity is dynamically managed
     private int bonusCapacity = 0;
+
+    private int money = 0;
 
     // The current total capacity available
     public int CurrentCapacity => baseCapacity + bonusCapacity;
@@ -26,7 +29,7 @@ public class PlayerInventory : MonoBehaviour
 
     public void OnEnable()
     {
-        inventory = SaveManager.LoadInventory();
+        LoadData();
     }
 
     private void OnDisable()
@@ -89,7 +92,7 @@ public class PlayerInventory : MonoBehaviour
         }
 
         InventoryUpdated?.Invoke();
-        SaveManager.SaveInventory(inventory);
+        SaveData();
     }
 
     // Removes an item from the inventory
@@ -104,7 +107,7 @@ public class PlayerInventory : MonoBehaviour
             }
 
             InventoryUpdated?.Invoke();
-            SaveManager.SaveInventory(inventory);
+            SaveData();
             return true;
         }
 
@@ -137,7 +140,7 @@ public class PlayerInventory : MonoBehaviour
     {
         baseCapacity = newBaseCapacity;
         InventoryUpdated?.Invoke();
-        SaveManager.SaveInventory(inventory); // Save after setting base capacity
+        SaveData(); // Save after setting base capacity
     }
 
     // Set the bonus capacity, which can be upgraded by various means (e.g., house upgrade, items)
@@ -145,15 +148,53 @@ public class PlayerInventory : MonoBehaviour
     {
         bonusCapacity = newBonusCapacity;
         InventoryUpdated?.Invoke();
-        SaveManager.SaveInventory(inventory); // Save after setting bonus capacity
+        SaveData(); // Save after setting bonus capacity
+    }
+
+    public void AddMoney(int amount)
+    {
+        money += amount;
+        InventoryUpdated?.Invoke();
+        SaveData();
+    }
+
+    public bool RemoveMoney(int amount)
+    {
+        if (money >= amount)
+        {
+            money -= amount;
+            InventoryUpdated?.Invoke();
+            SaveData();
+            return true;
+        }
+
+        Debug.LogWarning("PlayerInventory: Not enough money!");
+        return false;
+    }
+
+    public int GetMoney()
+    {
+        return money;
+    }
+
+    private void SaveData()
+    {
+        SaveManager.SaveInventory(inventory, money);
+    }
+
+    private void LoadData()
+    {
+        (inventory, money) = SaveManager.LoadInventory();
     }
 
     // Log inventory for debugging
     public void LogTheInventory()
     {
+        Debug.Log("PlayerInventory: Current Inventory:");
         foreach (var item in inventory)
         {
-            Debug.Log($"PlayerInventory: {item.Key.ItemBaseToString()}, quantity: {item.Value}");
+            Debug.Log($" - Item: {item.Key.ItemBaseToString()}, Quantity: {item.Value}");
         }
+        Debug.Log($"PlayerInventory: Money = {money}");
     }
 }
