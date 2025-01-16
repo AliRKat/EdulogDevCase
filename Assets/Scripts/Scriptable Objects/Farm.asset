@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Farm
   m_EditorClassIdentifier: 
   state: 0
-  gatherableName: Farm
+  gatherableName: Wheat
   plowTime: 3
   growTime: 3
   harvestTime: 3

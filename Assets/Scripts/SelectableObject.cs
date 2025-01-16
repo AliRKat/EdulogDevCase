@@ -4,7 +4,7 @@ public class SelectableObject : MonoBehaviour, IInteractable
 {
     public static Material DefaultHighlightMaterial;
     [SerializeField] Transform predefinedPosition;
-    [SerializeField] Renderer _renderer;
+    Renderer _renderer;
     private Material originalMaterial;
 
     void Start()

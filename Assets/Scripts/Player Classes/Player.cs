@@ -10,6 +10,7 @@ public class Player : MonoBehaviour
     public event Action<GameObject> OnHarvestStart;
     public event Action<GameObject> OnHarvestFinish;
     public event Action OnInventoryUpdated;
+    public event Action OnMarketEnter;
 
     private PlayerAnimator playerAnimator;
     private PlayerMovement playerMovement;
@@ -59,11 +60,22 @@ public class Player : MonoBehaviour
                 isBusy = true;
             }
         }
+
+        if (destination.GetComponent<Market>() != null) 
+        {
+            OnMarketEnter?.Invoke();
+            isBusy = true;
+        }
     }
 
     public bool IsPlayerBusy()
     {
         return isBusy;
+    }
+
+    public void SetPlayerFree()
+    {
+        isBusy = false;
     }
 
     private void SubscribeToServiceEvents()
