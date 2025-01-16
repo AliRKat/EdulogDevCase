@@ -2,7 +2,7 @@ using System;
 using System.Collections;
 using UnityEngine;
 
-public class Gatherable : MonoBehaviour, IInteractable
+public class Gatherable : MonoBehaviour
 {
     public GatherableSO gatherableData;
     public Material highlightMaterial;
@@ -86,23 +86,6 @@ public class Gatherable : MonoBehaviour, IInteractable
     {
         obj.state = state;
         SaveState();
-    }
-    #endregion
-
-    #region Highlight Logic
-    public void Highlight()
-    {
-        if (_renderer != null)
-        {
-            _renderer.material = highlightMaterial;
-        }
-    }
-    public void ResetHighlight()
-    {
-        if (_renderer != null)
-        {
-            _renderer.material = originalMaterial;
-        }
     }
     #endregion
     #region Getters

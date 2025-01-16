@@ -6,6 +6,7 @@ public class GameManager : MonoBehaviour
 {
     public static GameManager Instance { get; private set; }
     public event Action<GameObject> OnInteractableClicked;
+    [SerializeField] Material DefaultHighlightMaterial;
 
     private GameObject SelectedObject;
     private Camera mainCamera;
@@ -22,6 +23,7 @@ public class GameManager : MonoBehaviour
             Instance = this;
         }
         mainCamera = Camera.main;
+        SelectableObject.DefaultHighlightMaterial = DefaultHighlightMaterial;
     }
 
     void Update()
@@ -68,9 +70,21 @@ public class GameManager : MonoBehaviour
         OnInteractableClicked?.Invoke(obj);
     }
 
-    public GameObject GetSelectedObj()
+    public bool IsObjectSelected()
     {
-        return SelectedObject;
+        if (!SelectedObject)
+        {
+            return false;
+        }
+        else
+        {
+            return true;
+        }
+    }
+
+    public SelectableObject GetSelectedObj()
+    {
+        return SelectedObject.GetComponent<SelectableObject>();
     }
 
     public void ClearSelectedObj()

@@ -1,3 +1,4 @@
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -19,7 +20,7 @@ public class PlayerMovement : MonoBehaviour
             return;
         }
 
-        if (GameManager.Instance.GetSelectedObj() != null)
+        if (GameManager.Instance.IsObjectSelected())
         {
             MoveToSelectedObject();
         }
@@ -50,7 +51,16 @@ public class PlayerMovement : MonoBehaviour
 
     private void MoveToSelectedObject()
     {
-        Vector3 targetPosition = GameManager.Instance.GetSelectedObj().transform.position;
+        Vector3 targetPosition;
+        Vector3 predefinedPosition = GameManager.Instance.GetSelectedObj().ReturnPredefinedTransform().position;
+        if (predefinedPosition != null)
+        {
+            targetPosition = predefinedPosition;
+        }
+        else 
+        {
+            targetPosition = GameManager.Instance.GetSelectedObj().transform.position;
+        }
         agent.destination = targetPosition;
 
         if (!agent.pathPending)
@@ -59,7 +69,7 @@ public class PlayerMovement : MonoBehaviour
             {
                 if (!agent.hasPath || agent.velocity.sqrMagnitude == 0f)
                 {
-                    Player.Instance.PlayerArrivedGatherable(GameManager.Instance.GetSelectedObj());
+                    Player.Instance.PlayerArrivedDestination(GameManager.Instance.GetSelectedObj().gameObject);
                     GameManager.Instance.ClearSelectedObj();
                 }
             }

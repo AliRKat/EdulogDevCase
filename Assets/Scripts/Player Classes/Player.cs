@@ -48,13 +48,16 @@ public class Player : MonoBehaviour
         playerAnimator.UpdateMovement(agent.velocity.magnitude);
     }
 
-    // notifies gathering class to handle player interaction when player arrived to a gatherable
-    public void PlayerArrivedGatherable(GameObject gatherable)
+    // notifies classes that player has arrived to a destination given by game manager
+    public void PlayerArrivedDestination(GameObject destination)
     {
-        playerGathering.HandleGatherableInteraction(gatherable);
-        if(gatherable.GetComponent<Gatherable>().GetCurrentState() != GatherableStates.Growing)
+        if (destination.GetComponent<Gatherable>() != null) 
         {
-            isBusy = true;
+            playerGathering.HandleGatherableInteraction(destination);
+            if (destination.GetComponent<Gatherable>().GetCurrentState() != GatherableStates.Growing)
+            {
+                isBusy = true;
+            }
         }
     }
 
