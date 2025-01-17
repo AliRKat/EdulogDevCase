@@ -10,6 +10,8 @@ public class SellObjectUI : MonoBehaviour
     [SerializeField] private Slider amountSlider;
     [SerializeField] private Button sellButton;
     [SerializeField] private Button sellAllButton;
+    [SerializeField] private TMP_Text sellButtonText;
+    [SerializeField] private TMP_Text sellAllButtonText;
 
     private ItemBase item;
     private int totalAmount;
@@ -41,6 +43,8 @@ public class SellObjectUI : MonoBehaviour
     internal void UpdateSellAmount(int amount)
     {
         sellAmountText.text = amount.ToString();
+        sellButtonText.text = $"Sell {amount} for {item.Value * amount}$";
+        sellAllButtonText.text = $"Sell All for {item.Value*amount}$";
     }
 
     private void OnSell(bool sellAll)

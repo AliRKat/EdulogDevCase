@@ -135,6 +135,8 @@ MonoBehaviour:
   amountSlider: {fileID: 2723535987358363051}
   sellButton: {fileID: 5178573525606784131}
   sellAllButton: {fileID: 7183766281101935706}
+  sellButtonText: {fileID: 8016054062358654881}
+  sellAllButtonText: {fileID: 5817792503314260247}
 --- !u!1 &3307320840153160952
 GameObject:
   m_ObjectHideFlags: 0
