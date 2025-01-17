@@ -44,7 +44,7 @@ public class SellObjectUI : MonoBehaviour
     {
         sellAmountText.text = amount.ToString();
         sellButtonText.text = $"Sell {amount} for {item.Value * amount}$";
-        sellAllButtonText.text = $"Sell All for {item.Value*amount}$";
+        sellAllButtonText.text = $"Sell All for {item.Value * totalAmount}$";
     }
 
     private void OnSell(bool sellAll)
