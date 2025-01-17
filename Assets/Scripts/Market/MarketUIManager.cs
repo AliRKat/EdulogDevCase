@@ -5,9 +5,11 @@ public class MarketUIManager : MonoBehaviour
 {
     [SerializeField] private GameObject marketUI;
     [SerializeField] private GameObject sellPanel;
+    [SerializeField] private GameObject buyPanel;
     [SerializeField] private GameObject sellObjectPrefab;
     [SerializeField] private Transform sellPanelContent;
     private Dictionary<ItemBase, SellObjectUI> sellObjects = new Dictionary<ItemBase, SellObjectUI>();
+
 
     private void Start()
     {
@@ -31,6 +33,20 @@ public class MarketUIManager : MonoBehaviour
     {
         marketUI.SetActive(false);
         Player.Instance.SetPlayerFree();
+    }
+
+    public void SwitchMenu()
+    {
+        if (sellPanel.gameObject.activeInHierarchy)
+        {
+            buyPanel.gameObject.SetActive(true);
+            sellPanel.gameObject.SetActive(false);
+        }
+        else if (buyPanel.gameObject.activeInHierarchy)
+        {
+            buyPanel.gameObject.SetActive(false);
+            sellPanel.gameObject.SetActive(true);
+        }
     }
 
     private void PopulateSellPanel()
