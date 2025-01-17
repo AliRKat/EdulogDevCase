@@ -12,11 +12,14 @@ public class Player : MonoBehaviour
     public event Action<GameObject> OnHarvestFinish;
     public event Action OnInventoryUpdated;
     public event Action OnMarketEnter;
+    public event Action OnEquipmentUpdate;
 
     private PlayerAnimator playerAnimator;
     private PlayerMovement playerMovement;
     private PlayerGathering playerGathering;
     private PlayerInventory playerInventory;
+    private PlayerLevel playerLevel;
+    private PlayerEquipment playerEquipment;
     private NavMeshAgent agent;
     private bool isBusy;
 
@@ -40,6 +43,8 @@ public class Player : MonoBehaviour
         playerMovement = GetComponent<PlayerMovement>();
         playerGathering = GetComponent<PlayerGathering>();
         playerInventory = GetComponent<PlayerInventory>();
+        playerLevel = GetComponent<PlayerLevel>();
+        playerEquipment = GetComponent<PlayerEquipment>();
         agent = playerMovement.GetMovementAgent();
 
         SubscribeToServiceEvents();
@@ -74,6 +79,11 @@ public class Player : MonoBehaviour
         return isBusy;
     }
 
+    public void SetPlayerBusy()
+    {
+        isBusy = true;
+    }
+
     public void SetPlayerFree()
     {
         isBusy = false;
@@ -84,16 +94,26 @@ public class Player : MonoBehaviour
         return playerInventory.inventory;
     }
 
+    public int GetPlayerLevel()
+    {
+        return playerLevel.level;
+    }
     private void SubscribeToServiceEvents()
     {
         playerGathering.OnInteractionStart += HandleInteractionStart;
         playerGathering.OnInteractionEnd += HandleInteractionEnd;
         playerInventory.InventoryUpdated += HandleInventoryUpdate;
+        playerEquipment.EquipmentUpdated += HandleEquipmendUpdate;
     }
 
     private void HandleInventoryUpdate()
     {
         OnInventoryUpdated?.Invoke();
+    }
+
+    private void HandleEquipmendUpdate()
+    {
+        OnEquipmentUpdate?.Invoke();
     }
 
     // invokes related start events depending on the state of the gatherable

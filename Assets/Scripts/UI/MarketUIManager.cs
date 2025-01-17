@@ -7,9 +7,10 @@ public class MarketUIManager : MonoBehaviour
     [SerializeField] private GameObject sellPanel;
     [SerializeField] private GameObject buyPanel;
     [SerializeField] private GameObject sellObjectPrefab;
+    [SerializeField] private GameObject buyObjectPrefab;
     [SerializeField] private Transform sellPanelContent;
+    [SerializeField] private Transform buyPanelContent;
     private Dictionary<ItemBase, SellObjectUI> sellObjects = new Dictionary<ItemBase, SellObjectUI>();
-
 
     private void Start()
     {
@@ -35,18 +36,16 @@ public class MarketUIManager : MonoBehaviour
         Player.Instance.SetPlayerFree();
     }
 
-    public void SwitchMenu()
+    public void SwitchBuyMenu()
     {
-        if (sellPanel.gameObject.activeInHierarchy)
-        {
-            buyPanel.gameObject.SetActive(true);
-            sellPanel.gameObject.SetActive(false);
-        }
-        else if (buyPanel.gameObject.activeInHierarchy)
-        {
-            buyPanel.gameObject.SetActive(false);
-            sellPanel.gameObject.SetActive(true);
-        }
+        buyPanel.gameObject.SetActive(true);
+        sellPanel.gameObject.SetActive(false);
+    }
+
+    public void SwitchSellMenu()
+    {
+        buyPanel.gameObject.SetActive(false);
+        sellPanel.gameObject.SetActive(true);
     }
 
     private void PopulateSellPanel()
