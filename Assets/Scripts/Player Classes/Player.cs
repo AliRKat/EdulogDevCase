@@ -13,6 +13,7 @@ public class Player : MonoBehaviour
     public event Action OnInventoryUpdated;
     public event Action OnMarketEnter;
     public event Action OnEquipmentUpdate;
+    public Equipment playerHouse;
 
     private PlayerAnimator playerAnimator;
     private PlayerMovement playerMovement;
@@ -108,6 +109,11 @@ public class Player : MonoBehaviour
     public int GetPlayerMoney()
     {
         return playerInventory.GetMoney();
+    }
+
+    public Equipment GetPlayerHouse()
+    {
+        return playerHouse;
     }
 
     public bool SpendMoney(int amount)

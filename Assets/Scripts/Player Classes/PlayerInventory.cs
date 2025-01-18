@@ -35,11 +35,13 @@ public class PlayerInventory : MonoBehaviour
     private void OnDisable()
     {
         Player.Instance.OnHarvestFinish -= HandleHarvestFinish;
+        Player.Instance.OnEquipmentUpdate -= HandleEquipmentUpdate;
     }
 
     private void SubscribeToPlayerEvents()
     {
         Player.Instance.OnHarvestFinish += HandleHarvestFinish;
+        Player.Instance.OnEquipmentUpdate += HandleEquipmentUpdate;
     }
 
     private void HandleHarvestFinish(GameObject gatheredItem)
@@ -92,7 +94,17 @@ public class PlayerInventory : MonoBehaviour
         }
 
         InventoryUpdated?.Invoke();
+        AddBonus();
         SaveData();
+    }
+
+    private void AddBonus()
+    {
+        Equipment currentEq = Player.Instance.GetComponent<PlayerEquipment>().GetCurrentEquipped();
+        if (currentEq.GetBonusType() == BonusTypes.HarvestAmount)
+        {
+            int bonusAmount = (int)(currentEq.GetLevel() * currentEq.GetBonusMultiplier());
+        }
     }
 
     // Removes an item from the inventory
@@ -135,12 +147,11 @@ public class PlayerInventory : MonoBehaviour
         return total;
     }
 
-    // Set the base capacity based on the player's level
-    public void SetBaseCapacity(int newBaseCapacity)
+    private void HandleEquipmentUpdate()
     {
-        baseCapacity = newBaseCapacity;
-        InventoryUpdated?.Invoke();
-        SaveData(); // Save after setting base capacity
+        int houseLevel = Player.Instance.GetPlayerHouse().GetLevel();
+        int bonusCapacity = houseLevel * Player.Instance.GetPlayerHouse().GetUpgradeMultiplier();
+        SetBonusCapacity(bonusCapacity);
     }
 
     // Set the bonus capacity, which can be upgraded by various means (e.g., house upgrade, items)

@@ -74,15 +74,63 @@ public class PlayerGathering : MonoBehaviour
     #endregion
     private IEnumerator GatherCoroutine(GameObject gatherable)
     {
-        yield return new WaitForSeconds(5f);
+        yield return new WaitForSeconds(CalculateGatherTime(gatherable));
         Debug.Log("PlayerGathering: Finished gathering: " + gatherable.name);
         StopGathering();
     }
 
     private IEnumerator PlowCoroutine(GameObject plowable)
     {
-        yield return new WaitForSeconds(5f);
+        yield return new WaitForSeconds(CalculatePlowTime(plowable));
         Debug.Log("PlayerGathering: Finished plowing: " + plowable.name);
         StopPlowing();
+    }
+
+    private float CalculatePlowTime(GameObject plowable)
+    {
+        float newPlowTime = plowable.GetComponent<Gatherable>().GetPlowTime();
+        Equipment currentEq = Player.Instance.GetComponent<PlayerEquipment>().GetCurrentEquipped();
+
+        if (currentEq != null) 
+        {
+            if (currentEq.GetBonusType() == BonusTypes.PlowTime)
+            {
+                int equipmentLevel = currentEq.GetLevel();
+
+                float bonusMultiplier = currentEq.GetBonusMultiplier();
+                float plowTimeReductionFactor = 1 - (equipmentLevel * 0.05f);
+                if (plowTimeReductionFactor < 0.1f)
+                {
+                    plowTimeReductionFactor = 0.1f;
+                }
+                newPlowTime *= bonusMultiplier * plowTimeReductionFactor;
+            }
+        }
+
+        return newPlowTime;
+    }
+
+    private float CalculateGatherTime(GameObject gatherable)
+    {
+        float newHarvestTime = gatherable.GetComponent<Gatherable>().GetHarvestTime();
+        Equipment currentEq = Player.Instance.GetComponent<PlayerEquipment>().GetCurrentEquipped();
+
+        if (currentEq != null)
+        {
+            if (currentEq.GetBonusType() == BonusTypes.HarvestTime)
+            {
+                int equipmentLevel = currentEq.GetLevel();
+
+                float bonusMultiplier = currentEq.GetBonusMultiplier();
+                float harvestTimeReductionFactor = 1 - (equipmentLevel * 0.05f);
+                if (harvestTimeReductionFactor < 0.1f)
+                {
+                    harvestTimeReductionFactor = 0.1f;
+                }
+                newHarvestTime *= bonusMultiplier * harvestTimeReductionFactor;
+            }
+        }
+
+        return newHarvestTime;
     }
 }
