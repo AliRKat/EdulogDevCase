@@ -24,7 +24,7 @@ public class PlayerXPManager : EditorWindow
         GUILayout.Space(10);
 
         // Input fields for item properties
-        boostAmount = EditorGUILayout.IntField("Item Quantity", boostAmount);
+        boostAmount = EditorGUILayout.IntField("XP Amount", boostAmount);
 
         // Button to create a new item
         if (GUILayout.Button("Add XP"))

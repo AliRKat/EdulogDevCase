@@ -34,6 +34,12 @@ public class SaveManagerEditor : EditorWindow
         }
 
         // Button for clearing gatherable state
+        if (GUILayout.Button("Clear Equipment Data"))
+        {
+            ClearEquipmentData();
+        }
+
+        // Button for clearing gatherable state
         if (GUILayout.Button("Clear All Data"))
         {
             ClearAllData();
@@ -56,6 +62,12 @@ public class SaveManagerEditor : EditorWindow
     private void ClearGatherableStateData()
     {
         SaveManager.ClearGatherableStateData();
+    }
+
+    // Clear equipment data
+    private void ClearEquipmentData()
+    {
+        SaveManager.ClearEquipmentData();
     }
 
     private void ClearAllData()

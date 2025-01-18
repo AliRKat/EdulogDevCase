@@ -160,6 +160,19 @@ public class SaveManager
         }
     }
 
+    public static void ClearEquipmentData()
+    {
+        if (File.Exists(equipmentPath))
+        {
+            File.Delete(equipmentPath);
+            Debug.Log("SaveManager: Equipment data has been cleared!");
+        }
+        else
+        {
+            Debug.LogWarning("SaveManager: No player data file found to delete.");
+        }
+    }
+
     public static void ClearGatherableStateData()
     {
         if (File.Exists(savePath))
