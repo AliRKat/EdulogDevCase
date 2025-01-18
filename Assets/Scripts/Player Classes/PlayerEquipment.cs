@@ -184,16 +184,20 @@ public class PlayerEquipment : MonoBehaviour
 
         foreach (var equipmentPrefab in EquipmentPrefabs)
         {
-            var meshChild = equipmentPrefab.transform.GetChild(0).gameObject;
+            if(equipmentPrefab.meshReference != null)
+            {
+                var meshChild = equipmentPrefab.meshReference;
 
-            if (meshChild != null)
-            {
-                equipmentMeshMap[equipmentPrefab.GetEquipmentName()] = meshChild;
+                if (meshChild != null)
+                {
+                    equipmentMeshMap[equipmentPrefab.GetEquipmentName()] = meshChild;
+                }
+                else
+                {
+                    Debug.LogWarning($"Mesh child not found for {equipmentPrefab.GetEquipmentName()}");
+                }
             }
-            else
-            {
-                Debug.LogWarning($"Mesh child not found for {equipmentPrefab.GetEquipmentName()}");
-            }
+            
         }
     }
 

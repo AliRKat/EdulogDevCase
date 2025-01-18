@@ -130,7 +130,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   equipmentData: {fileID: 11400000, guid: 9938c4c60be8813469afab3866d8b939, type: 2}
-  meshObject: {fileID: 2587311660051963838}
+  meshReference: {fileID: 2587311660051963838}
 --- !u!65 &2904068585081931912
 BoxCollider:
   m_ObjectHideFlags: 0
