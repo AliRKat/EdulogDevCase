@@ -16,6 +16,31 @@ public class PlayerEquipment : MonoBehaviour
     {
         SubscribeToEquipEvents();
         InitializeMeshReferences();
+        LoadEquipments();
+    }
+    private void OnApplicationQuit()
+    {
+        SaveEquipments();
+    }
+
+    private void SaveEquipments()
+    {
+        SaveManager.SaveEquipment(EquipmentsOwned, Equipped);
+    }
+
+    private void LoadEquipments()
+    {
+        var (loadedEquipments, equipped) = SaveManager.LoadEquipment(EquipmentPrefabs);
+        EquipmentsOwned = loadedEquipments;
+        Equipped = equipped;
+
+        DeactivateAllEquipmentMeshes();
+        if (Equipped != null)
+        {
+            ActivateEquipmentMesh(Equipped);
+        }
+
+        EquipmentUpdated?.Invoke();
     }
 
     public void Equip(Equipment equipment)
@@ -64,6 +89,7 @@ public class PlayerEquipment : MonoBehaviour
         GameObject droppedObject = Instantiate(prefab.gameObject, originalPosition, originalRotation);
         droppedObject.transform.parent = null;
 
+        SaveEquipments();
         StartCoroutine(AnimateDrop(droppedObject));
     }
 
@@ -131,6 +157,7 @@ public class PlayerEquipment : MonoBehaviour
         {
             EquipmentsOwned.Add(prefab);
             EquipmentUpdated?.Invoke();
+            SaveEquipments();
         }
         else
         {

@@ -7,6 +7,56 @@ public class SaveManager
     private static readonly string savePath = Application.persistentDataPath + "/gatherables.json";
     private static readonly string playerDataPath = Application.persistentDataPath + "/playerData.json";
     private static readonly string inventoryPath = Application.persistentDataPath + "/inventory.json";
+    private static readonly string equipmentPath = Application.persistentDataPath + "/equipment.json";
+
+    public static void SaveEquipment(List<Equipment> equipmentsOwned, Equipment equipped)
+    {
+        List<SerializableEquipment> serializableEquipments = new List<SerializableEquipment>();
+
+        foreach (var equipment in equipmentsOwned)
+        {
+            serializableEquipments.Add(new SerializableEquipment(equipment.GetEquipmentName(), equipment.level));
+        }
+
+        string equippedName = equipped != null ? equipped.GetEquipmentName() : null;
+        EquipmentSaveData data = new EquipmentSaveData(serializableEquipments, equippedName);
+
+        string json = JsonUtility.ToJson(data);
+        File.WriteAllText(equipmentPath, json);
+        Debug.Log("SaveManager: Equipment data saved!");
+    }
+
+    public static (List<Equipment>, Equipment) LoadEquipment(List<Equipment> allEquipmentPrefabs)
+    {
+        if (!File.Exists(equipmentPath))
+        {
+            Debug.LogWarning("SaveManager: No equipment data found. Returning empty list.");
+            return (new List<Equipment>(), null);
+        }
+
+        string json = File.ReadAllText(equipmentPath);
+        EquipmentSaveData data = JsonUtility.FromJson<EquipmentSaveData>(json);
+
+        List<Equipment> loadedEquipments = new List<Equipment>();
+        Equipment equipped = null;
+
+        foreach (var serializableEquipment in data.EquipmentsOwned)
+        {
+            var prefab = allEquipmentPrefabs.Find(e => e.GetEquipmentName() == serializableEquipment.Name);
+            if (prefab != null)
+            {
+                prefab.level = serializableEquipment.Level;
+                loadedEquipments.Add(prefab);
+            }
+        }
+
+        if (!string.IsNullOrEmpty(data.EquippedEquipment))
+        {
+            equipped = allEquipmentPrefabs.Find(e => e.GetEquipmentName() == data.EquippedEquipment);
+        }
+
+        return (loadedEquipments, equipped);
+    }
 
     public static void SaveInventory(Dictionary<ItemBase, int> inventory, int money)
     {
@@ -176,5 +226,31 @@ public class PlayerData
     {
         Level = level;
         CurrentXP = currentXP;
+    }
+}
+
+[System.Serializable]
+public class SerializableEquipment
+{
+    public string Name;
+    public int Level;
+
+    public SerializableEquipment(string name, int level)
+    {
+        Name = name;
+        Level = level;
+    }
+}
+
+[System.Serializable]
+public class EquipmentSaveData
+{
+    public List<SerializableEquipment> EquipmentsOwned;
+    public string EquippedEquipment;
+
+    public EquipmentSaveData(List<SerializableEquipment> equipmentsOwned, string equippedEquipment)
+    {
+        EquipmentsOwned = equipmentsOwned;
+        EquippedEquipment = equippedEquipment;
     }
 }

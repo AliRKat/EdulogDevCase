@@ -5,6 +5,8 @@ public class Equipment : MonoBehaviour
     public UpgradeableSO equipmentData;
     public GameObject meshReference;
 
+    internal int level = 1;
+
     private string equipmentName;
     private string equipmentDescription;
     private BonusTypes bonus;
@@ -13,8 +15,6 @@ public class Equipment : MonoBehaviour
     private int basePrice;
     private int upgradeMultiplier;
     private Sprite objectSprite;
-
-    private int level = 1;
 
     private void Start()
     {
