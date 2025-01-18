@@ -78,7 +78,6 @@ public class Player : MonoBehaviour
         {
             playerEquipment.Add(destination.GetComponent<Equipment>());
             destination.GetComponent<Shovel>().Collect();
-            Destroy(destination);
         }
     }
 

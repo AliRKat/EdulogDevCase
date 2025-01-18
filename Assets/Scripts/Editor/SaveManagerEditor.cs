@@ -75,5 +75,6 @@ public class SaveManagerEditor : EditorWindow
         SaveManager.ClearInventoryData();
         SaveManager.ClearXPProgressionData();
         SaveManager.ClearGatherableStateData();
+        SaveManager.ClearEquipmentData();
     }
 }

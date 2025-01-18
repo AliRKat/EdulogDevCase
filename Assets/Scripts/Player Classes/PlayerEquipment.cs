@@ -25,12 +25,13 @@ public class PlayerEquipment : MonoBehaviour
 
     private void SaveEquipments()
     {
-        SaveManager.SaveEquipment(EquipmentsOwned, Equipped);
+        var (_, _, shovelCollected) = SaveManager.LoadEquipment(EquipmentPrefabs);
+        SaveManager.SaveEquipment(EquipmentsOwned, Equipped, shovelCollected);
     }
 
     private void LoadEquipments()
     {
-        var (loadedEquipments, equipped) = SaveManager.LoadEquipment(EquipmentPrefabs);
+        var (loadedEquipments, equipped, shovelCollected) = SaveManager.LoadEquipment(EquipmentPrefabs);
         EquipmentsOwned = loadedEquipments;
         Equipped = equipped;
 

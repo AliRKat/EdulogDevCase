@@ -9,7 +9,7 @@ public class SaveManager
     private static readonly string inventoryPath = Application.persistentDataPath + "/inventory.json";
     private static readonly string equipmentPath = Application.persistentDataPath + "/equipment.json";
 
-    public static void SaveEquipment(List<Equipment> equipmentsOwned, Equipment equipped)
+    public static void SaveEquipment(List<Equipment> equipmentsOwned, Equipment equipped, bool shovelCollected)
     {
         List<SerializableEquipment> serializableEquipments = new List<SerializableEquipment>();
 
@@ -19,19 +19,19 @@ public class SaveManager
         }
 
         string equippedName = equipped != null ? equipped.GetEquipmentName() : null;
-        EquipmentSaveData data = new EquipmentSaveData(serializableEquipments, equippedName);
+        EquipmentSaveData data = new EquipmentSaveData(serializableEquipments, equippedName, shovelCollected);
 
         string json = JsonUtility.ToJson(data);
         File.WriteAllText(equipmentPath, json);
         Debug.Log("SaveManager: Equipment data saved!");
     }
 
-    public static (List<Equipment>, Equipment) LoadEquipment(List<Equipment> allEquipmentPrefabs)
+    public static (List<Equipment>, Equipment, bool) LoadEquipment(List<Equipment> allEquipmentPrefabs)
     {
         if (!File.Exists(equipmentPath))
         {
             Debug.LogWarning("SaveManager: No equipment data found. Returning empty list.");
-            return (new List<Equipment>(), null);
+            return (new List<Equipment>(), null, false);
         }
 
         string json = File.ReadAllText(equipmentPath);
@@ -55,7 +55,7 @@ public class SaveManager
             equipped = allEquipmentPrefabs.Find(e => e.GetEquipmentName() == data.EquippedEquipment);
         }
 
-        return (loadedEquipments, equipped);
+        return (loadedEquipments, equipped, data.ShovelCollected);
     }
 
     public static void SaveInventory(Dictionary<ItemBase, int> inventory, int money)
@@ -260,10 +260,12 @@ public class EquipmentSaveData
 {
     public List<SerializableEquipment> EquipmentsOwned;
     public string EquippedEquipment;
+    public bool ShovelCollected; // Yeni alan
 
-    public EquipmentSaveData(List<SerializableEquipment> equipmentsOwned, string equippedEquipment)
+    public EquipmentSaveData(List<SerializableEquipment> equipmentsOwned, string equippedEquipment, bool shovelCollected)
     {
         EquipmentsOwned = equipmentsOwned;
         EquippedEquipment = equippedEquipment;
+        ShovelCollected = shovelCollected;
     }
 }

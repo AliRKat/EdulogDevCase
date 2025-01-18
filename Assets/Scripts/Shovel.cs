@@ -1,13 +1,15 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 public class Shovel : MonoBehaviour
 {
-    private string shovelKey = "ShovelCollected";
-
     private void Start()
     {
-        // Eðer shovel alýnmýþsa, objeyi devre dýþý býrak
-        if (PlayerPrefs.GetInt(shovelKey, 0) == 1)
+        // SaveManager'dan shovel durumu yükleniyor
+        var (_, _, shovelCollected) = SaveManager.LoadEquipment(new List<Equipment>());
+
+        // Eðer shovel alýnmýþsa objeyi devre dýþý býrak
+        if (shovelCollected)
         {
             gameObject.SetActive(false);
         }
@@ -15,11 +17,11 @@ public class Shovel : MonoBehaviour
 
     public void Collect()
     {
-        // Shovel alýndý olarak iþaretle
-        PlayerPrefs.SetInt(shovelKey, 1);
-        PlayerPrefs.Save();
+        // Shovel durumu kaydediliyor
+        var (equipmentsOwned, equipped, _) = SaveManager.LoadEquipment(new List<Equipment>());
+        SaveManager.SaveEquipment(equipmentsOwned, equipped, true);
 
-        // Obje sahneden kaldýr
+        // Obje sahneden kaldýrýlýyor
         gameObject.SetActive(false);
     }
 }
