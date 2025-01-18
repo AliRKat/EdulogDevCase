@@ -27,6 +27,7 @@ public class MarketUIManager : MonoBehaviour
     private void OpenMarketUI()
     {
         PopulateSellPanel();
+        PopulateBuyPanel();
         marketUI.SetActive(true);
     }
 
@@ -69,6 +70,66 @@ public class MarketUIManager : MonoBehaviour
             sellObjectUI.Setup(item, amount, OnSliderValueChanged, OnSellItem);
             sellObjects[item] = sellObjectUI;
         }
+    }
+
+    private void PopulateBuyPanel()
+    {
+        // Paneldeki eski öðeleri temizle
+        foreach (Transform child in buyPanelContent)
+        {
+            Destroy(child.gameObject);
+        }
+
+        PlayerEquipment playerEquipment = Player.Instance.GetComponent<PlayerEquipment>();
+        var ownedEquipments = playerEquipment.GetEquipmentsOwned();
+        var allEquipments = playerEquipment.GetAllEquipments();
+
+        foreach (var equipment in allEquipments)
+        {
+            if (ownedEquipments.Contains(equipment))
+            {
+                var buyObject = Instantiate(buyObjectPrefab, buyPanelContent);
+                var buyObjectUI = buyObject.GetComponent<BuyObjectUI>();
+
+                buyObjectUI.Setup(
+                    equipment,
+                    Player.Instance.GetPlayerMoney(),
+                    Player.Instance.GetPlayerLevel(),
+                    (price) => OnUpgradeItem(equipment, price) // upgrade
+                );
+            }
+            else
+            {
+                var buyObject = Instantiate(buyObjectPrefab, buyPanelContent);
+                var buyObjectUI = buyObject.GetComponent<BuyObjectUI>();
+
+                buyObjectUI.Setup(
+                    equipment,
+                    Player.Instance.GetPlayerMoney(),
+                    Player.Instance.GetPlayerLevel(),
+                    (price) => OnBuyItem(equipment, price) // buy
+                );
+            }
+        }
+    }
+
+    private void OnBuyItem(Equipment equipment, int price)
+    {
+        if (Player.Instance.GetPlayerLevel() >= equipment.GetMinimumLevel() && Player.Instance.SpendMoney(price))
+        {
+            PlayerEquipment playerEquipment = Player.Instance.GetComponent<PlayerEquipment>();
+            playerEquipment.Add(equipment);
+        }
+        PopulateBuyPanel();
+    }
+
+    private void OnUpgradeItem(Equipment equipment, int price)
+    {
+        if(Player.Instance.GetPlayerLevel() >= equipment.GetLevel() && Player.Instance.SpendMoney(price))
+        {
+            equipment.LevelUp();
+        }
+        PopulateBuyPanel();
     }
 
     private void OnSellItem(ItemBase item, int amount)

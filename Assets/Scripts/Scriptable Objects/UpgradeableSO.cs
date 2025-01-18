@@ -2,7 +2,7 @@ using UnityEngine;
 using UnityEngine.UI;
 
 [CreateAssetMenu(fileName = "", menuName = "Equipment")]
-public class EquipmentSO : ScriptableObject
+public class UpgradeableSO : ScriptableObject
 {
     public string equipmentName;
     public string equipmentDescription;

@@ -2,8 +2,7 @@ using UnityEngine;
 
 public class Equipment : MonoBehaviour
 {
-    public EquipmentSO equipmentData;
-    public GameObject meshObject;
+    public UpgradeableSO equipmentData;
 
     private string equipmentName;
     private string equipmentDescription;

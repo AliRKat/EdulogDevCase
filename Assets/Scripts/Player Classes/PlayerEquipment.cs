@@ -14,7 +14,6 @@ public class PlayerEquipment : MonoBehaviour
 
     private void Start()
     {
-        EquipmentsOwned = EquipmentPrefabs;
         SubscribeToEquipEvents();
         InitializeMeshReferences();
     }
@@ -52,16 +51,17 @@ public class PlayerEquipment : MonoBehaviour
         {
             return;
         }
+        var prefab = EquipmentPrefabs.Find(item => item.GetEquipmentName() == equipment.GetEquipmentName());
 
-        EquipmentsOwned.Remove(equipment);
+        EquipmentsOwned.Remove(prefab);
         DeactivateAllEquipmentMeshes();
         EquipmentUpdated?.Invoke();
         Equipped = null;
 
-        Transform equipmentTransform = equipment.transform;
+        Transform equipmentTransform = prefab.transform;
         Vector3 originalPosition = equipmentTransform.position;
         Quaternion originalRotation = equipmentTransform.rotation;
-        GameObject droppedObject = Instantiate(equipment.gameObject, originalPosition, originalRotation);
+        GameObject droppedObject = Instantiate(prefab.gameObject, originalPosition, originalRotation);
         droppedObject.transform.parent = null;
 
         StartCoroutine(AnimateDrop(droppedObject));
@@ -124,8 +124,23 @@ public class PlayerEquipment : MonoBehaviour
         {
             return;
         }
-        EquipmentsOwned.Add(equipment);
-        EquipmentUpdated?.Invoke();
+
+        var prefab = EquipmentPrefabs.Find(item => item.GetEquipmentName() == equipment.GetEquipmentName());
+
+        if (prefab != null)
+        {
+            EquipmentsOwned.Add(prefab);
+            EquipmentUpdated?.Invoke();
+        }
+        else
+        {
+            Debug.LogWarning("Prefab not found for " + equipment.GetEquipmentName());
+        }
+    }
+
+    public bool IsEquipmentOwned(Equipment equipment)
+    {
+        return EquipmentsOwned.Exists(item => item.GetEquipmentName() == equipment.GetEquipmentName());
     }
 
     public List<Equipment> GetEquipmentsOwned()
@@ -133,14 +148,14 @@ public class PlayerEquipment : MonoBehaviour
         return EquipmentsOwned;
     }
 
+    public List<Equipment> GetAllEquipments()
+    {
+        return EquipmentPrefabs;
+    }
+
     public Equipment GetCurrentEquipped()
     {
         return Equipped;
-    }
-
-    private bool IsEquipmentOwned(Equipment equipment)
-    {
-        return EquipmentsOwned.Exists(item => item.GetEquipmentName() == equipment.GetEquipmentName());
     }
 
     private void DeactivateAllEquipmentMeshes()

@@ -72,6 +72,12 @@ public class Player : MonoBehaviour
             OnMarketEnter?.Invoke();
             isBusy = true;
         }
+
+        if (destination.GetComponent<Equipment>() != null)
+        {
+            playerEquipment.Add(destination.GetComponent<Equipment>());
+            Destroy(destination);
+        }
     }
 
     public bool IsPlayerBusy()
@@ -98,6 +104,21 @@ public class Player : MonoBehaviour
     {
         return playerLevel.level;
     }
+
+    public int GetPlayerMoney()
+    {
+        return playerInventory.GetMoney();
+    }
+
+    public bool SpendMoney(int amount)
+    {
+        if (playerInventory.RemoveMoney(amount))
+        {
+            return true;
+        }
+        return false;
+    }
+
     private void SubscribeToServiceEvents()
     {
         playerGathering.OnInteractionStart += HandleInteractionStart;

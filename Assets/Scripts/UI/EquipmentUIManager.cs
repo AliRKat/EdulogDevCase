@@ -115,16 +115,19 @@ public class EquipmentUIManager : MonoBehaviour
         equipmentList = Player.Instance.GetComponent<PlayerEquipment>().GetEquipmentsOwned();
         foreach (var entry in equipmentList)
         {
-            var equipObj = Instantiate(equipmentObjButton, inventoryContent);
-            EquipmentObjectUI inventoryUI = equipObj.GetComponent<EquipmentObjectUI>();
+            if (entry.GetEquipmentName() != "House")
+            {
+                var equipObj = Instantiate(equipmentObjButton, inventoryContent);
+                EquipmentObjectUI inventoryUI = equipObj.GetComponent<EquipmentObjectUI>();
 
-            if (inventoryUI != null)
-            {
-                inventoryUI.Setup(entry, UpdateEquipmentDetailsScreen);
-            }
-            else
-            {
-                Debug.LogError("EquipmentObjectUI component missing on the equipment button prefab.");
+                if (inventoryUI != null)
+                {
+                    inventoryUI.Setup(entry, UpdateEquipmentDetailsScreen);
+                }
+                else
+                {
+                    Debug.LogError("EquipmentObjectUI component missing on the equipment button prefab.");
+                }
             }
         }
     }
