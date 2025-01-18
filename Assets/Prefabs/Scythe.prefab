@@ -93,6 +93,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4905175846389964861}
   - component: {fileID: 1308750507215027025}
+  - component: {fileID: 4587992375754791038}
   m_Layer: 0
   m_Name: Scythe
   m_TagString: Untagged
@@ -108,14 +109,14 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4902164687233151385}
   serializedVersion: 2
-  m_LocalRotation: {x: -0.030171212, y: -0.63584715, z: 0.7708234, w: -0.024888033}
-  m_LocalPosition: {x: 0.163, y: -0.074, z: -0.501}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 7656123871767545069}
   m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 79.038, y: -4.483, z: 180}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1308750507215027025
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -130,3 +131,24 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   equipmentData: {fileID: 11400000, guid: 241a0a74788950c448eb2614a07d676e, type: 2}
   meshObject: {fileID: 821002208749366159}
+--- !u!65 &4587992375754791038
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4902164687233151385}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 1.1281687, y: 1.2885747, z: 0.35154527}
+  m_Center: {x: -0.30011338, y: -0.18491018, z: 0}

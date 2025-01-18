@@ -817,7 +817,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 304994029}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1219633408}
+        m_TargetAssemblyTypeName: EquipmentUIManager, Assembly-CSharp
+        m_MethodName: Drop
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &304994029
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1353,7 +1365,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 552619459}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1219633408}
+        m_TargetAssemblyTypeName: EquipmentUIManager, Assembly-CSharp
+        m_MethodName: Unequip
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &552619459
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3008,6 +3032,11 @@ MonoBehaviour:
   equipmentUI: {fileID: 1267403942}
   inventoryContent: {fileID: 333749599}
   equipmentObjButton: {fileID: 7320478060358252325, guid: b43792b1728a4da499aecd5c16a07ebe, type: 3}
+  detailsScrenSprite: {fileID: 2014915437}
+  detailsScrenDescription: {fileID: 1400201574}
+  equipButton: {fileID: 2119971634}
+  unequipButton: {fileID: 552619458}
+  dropButton: {fileID: 304994028}
 --- !u!224 &1228252857 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 8437082086229917326, guid: 33a809d90d38e124f8049889e570b6bb, type: 3}
@@ -4940,7 +4969,7 @@ TerrainCollider:
     serializedVersion: 2
     m_Bits: 0
   m_LayerOverridePriority: 0
-  m_ProvidesContacts: 0
+  m_ProvidesContacts: 1
   m_Enabled: 1
   serializedVersion: 2
   m_TerrainData: {fileID: 15600000, guid: 1792bd1ad0564164783928d21757bfc2, type: 2}
@@ -5112,7 +5141,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 2119971635}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1219633408}
+        m_TargetAssemblyTypeName: EquipmentUIManager, Assembly-CSharp
+        m_MethodName: Equip
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &2119971635
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -10329,6 +10370,10 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1665303756112179577, guid: 5b5712df1d9288e49bbfb46a58a501d3, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2634459020147603075, guid: 5b5712df1d9288e49bbfb46a58a501d3, type: 3}
+      propertyPath: m_UseGravity
       value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []

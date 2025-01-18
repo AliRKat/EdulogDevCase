@@ -93,6 +93,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5643496534813336608}
   - component: {fileID: 3532258224621058430}
+  - component: {fileID: 126390157656862639}
   m_Layer: 0
   m_Name: Shovel
   m_TagString: Untagged
@@ -108,14 +109,14 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5540535658966745679}
   serializedVersion: 2
-  m_LocalRotation: {x: -0.6508559, y: 0.63837606, z: 0.1585557, w: -0.37910786}
-  m_LocalPosition: {x: -0.1735929, y: 0.06690311, z: 0.27070922}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 8369102891969465072}
   m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: -196.921, y: 46.192, z: 96.15}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &3532258224621058430
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -130,3 +131,24 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   equipmentData: {fileID: 11400000, guid: fa87d016774f5034894dab45aa2107ed, type: 2}
   meshObject: {fileID: 4243309346083520003}
+--- !u!65 &126390157656862639
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5540535658966745679}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 0.5279421, y: 1.6583952, z: 0.35154527}
+  m_Center: {x: -0.0014590323, y: -0.7194659, z: 0.019770205}
