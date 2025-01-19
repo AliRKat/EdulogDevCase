@@ -1,29 +1,44 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class MainMenuManager : MonoBehaviour
 {
-    // Start game function
+    [SerializeField] GameObject settings;
+    [SerializeField] private Toggle soundToggle;
     public void StartGame()
     {
-        Debug.Log("Starting game...");
         SceneManager.LoadScene("GameScene");
     }
-
-    // Open settings function
-    public void OpenSettings()
+    private void Start()
     {
-        Debug.Log("Opening settings...");
-        // Þimdilik sadece log atýyor, buraya settings menüsünü açacak kod eklenebilir.
+        soundToggle.isOn = SoundManager.Instance.IsSoundEnabled();
+        soundToggle.onValueChanged.AddListener(OnSoundToggleChanged);
     }
 
-    // Exit game function
+    private void OnDestroy()
+    {
+        soundToggle.onValueChanged.RemoveListener(OnSoundToggleChanged);
+    }
+
+    private void OnSoundToggleChanged(bool isOn)
+    {
+        SoundManager.Instance.SetSoundEnabled(isOn);
+    }
+
+    public void Settings()
+    {
+        if (settings != null)
+        {
+            bool isActive = settings.activeSelf;
+            settings.SetActive(!isActive);
+        }
+    }
+
     public void ExitGame()
     {
-        Debug.Log("Exiting game...");
         Application.Quit();
 #if UNITY_EDITOR
-        // Oyun Unity Editor içindeyse, editörden çýkmaz ama bunu loglar.
         UnityEditor.EditorApplication.isPlaying = false;
 #endif
     }

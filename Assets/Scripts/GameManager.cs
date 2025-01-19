@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using TMPro;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
@@ -17,7 +18,7 @@ public class GameManager : MonoBehaviour
     public List<GameObject> itemPrefabs;
     private Dictionary<string, GameObject> prefabDictionary;
     public TMP_Text generalText;
-
+    [SerializeField] private GameObject EscapeMenu;
 
     private void Awake()
     {
@@ -97,6 +98,41 @@ public class GameManager : MonoBehaviour
     {
         HighlightObjectLogic();
         UpdateGeneralText();
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            ToggleEscapeMenu();
+        }
+    }
+
+    private void ToggleEscapeMenu()
+    {
+        if (EscapeMenu != null)
+        {
+            bool isActive = EscapeMenu.activeSelf;
+            if (!isActive) 
+            {
+                Player.Instance.SetPlayerBusy();
+            }
+            else
+            {
+                Player.Instance.SetPlayerFree();
+            }
+            EscapeMenu.SetActive(!isActive);
+        }
+        else
+        {
+            Debug.LogWarning("Target object is not assigned in GameManager!");
+        }
+    }
+
+    public void BackToMainMenu()
+    {
+        SceneManager.LoadScene("MainMenu");
+    }
+
+    public void CloseGame()
+    {
+        Application.Quit();
     }
 
     void HighlightObjectLogic()
