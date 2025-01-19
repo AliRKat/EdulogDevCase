@@ -16,6 +16,7 @@ public class SaveManager
 
         foreach (var equipment in equipmentsOwned)
         {
+            Debug.Log("Trying to save " + equipment);
             serializableEquipments.Add(new SerializableEquipment(equipment.GetEquipmentName(), equipment.level));
         }
 

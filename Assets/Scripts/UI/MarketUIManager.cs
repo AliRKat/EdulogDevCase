@@ -113,7 +113,7 @@ public class MarketUIManager : MonoBehaviour
             if (Player.Instance.GetPlayerLevel() >= equipment.GetMinimumLevel() && Player.Instance.SpendMoney(price))
             {
                 PlayerEquipment playerEquipment = Player.Instance.GetComponent<PlayerEquipment>();
-                playerEquipment.Add(equipment);
+                playerEquipment.Add(equipment.equipmentType);
             }
         }
         else

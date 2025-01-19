@@ -20,7 +20,10 @@ public class PlayerEquipment : MonoBehaviour
     {
         SubscribeToEquipEvents();
         LoadEquipments();
-        EquipmentsOwned.Add(Player.Instance.playerHouse);
+        if(!EquipmentsOwned.Contains(Player.Instance.playerHouse))
+        {
+            EquipmentsOwned.Add(Player.Instance.playerHouse);
+        }
     }
     private void Update()
     {
@@ -29,22 +32,34 @@ public class PlayerEquipment : MonoBehaviour
 
     private void SaveEquipments()
     {
-        var (_, _, shovelCollected) = SaveManager.LoadEquipment(EquipmentPrefabs);
-        SaveManager.SaveEquipment(EquipmentsOwned, Equipped, shovelCollected);
+        foreach (var item in EquipmentsOwned)
+        {
+            PlayerPrefs.SetInt(item.equipmentType.ToString(), 1);
+        }
     }
 
     private void LoadEquipments()
     {
-        var (loadedEquipments, equipped, shovelCollected) = SaveManager.LoadEquipment(EquipmentPrefabs);
-        EquipmentsOwned = loadedEquipments;
-        Equipped = equipped;
-
-        if (Equipped != null)
+        foreach (var item in EquipmentPrefabs)
         {
-            Activate(Equipped);
+            int value = PlayerPrefs.GetInt(item.equipmentType.ToString());
+            if (value > 0) 
+            {
+                EquipmentsOwned.Add((Equipment)item);
+            }
         }
-
         EquipmentUpdated?.Invoke();
+    }
+
+    private void RemoveEquipment(EquipmentType type)
+    {
+        foreach (var item in EquipmentPrefabs)
+        {
+            if(type == item.equipmentType)
+            {
+                PlayerPrefs.SetInt(item.equipmentType.ToString(), 0);
+            }
+        }
     }
 
     private void Activate(Equipment eq)
@@ -99,6 +114,7 @@ public class PlayerEquipment : MonoBehaviour
         var prefab = EquipmentPrefabs.Find(item => item.GetEquipmentName() == equipment.GetEquipmentName());
 
         EquipmentsOwned.Remove(prefab);
+        RemoveEquipment(equipment.equipmentType);
         Deactivate(equipment);
         EquipmentUpdated?.Invoke();
         Equipped = null;
@@ -157,15 +173,14 @@ public class PlayerEquipment : MonoBehaviour
         droppedItem.Save();
     }
 
-    public void Add(Equipment equipment)
+    public void Add(EquipmentType type)
     {
-        if (IsEquipmentOwned(equipment))
+        if(EquipmentsOwned.Exists(item => item.GetEquipmentName() == type.ToString()))
         {
             return;
         }
 
-        var prefab = EquipmentPrefabs.Find(item => item.GetEquipmentName() == equipment.GetEquipmentName());
-
+        var prefab = EquipmentPrefabs.Find(item => item.GetEquipmentName() == type.ToString());
         if (prefab != null)
         {
             EquipmentsOwned.Add(prefab);
@@ -173,7 +188,7 @@ public class PlayerEquipment : MonoBehaviour
         }
         else
         {
-            Debug.LogWarning("Prefab not found for " + equipment.GetEquipmentName());
+            Debug.LogWarning("Prefab not found for " + type.ToString());
         }
         SaveEquipments();
     }
@@ -213,6 +228,11 @@ public class PlayerEquipment : MonoBehaviour
         equipmentUIManager.equipAction -= Equip;
         equipmentUIManager.unequipAction -= Unequip;
         equipmentUIManager.dropAction -= Drop;
+    }
+
+    private void OnApplicationQuit()
+    {
+        SaveEquipments();
     }
 
     public void EquipmentQuest(Dictionary<string, int> questObjectives, Quest quest)

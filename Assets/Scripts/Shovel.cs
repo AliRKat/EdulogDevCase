@@ -5,8 +5,7 @@ public class Shovel : MonoBehaviour
 {
     private void Start()
     {
-        var (_, _, shovelCollected) = SaveManager.LoadEquipment(new List<Equipment>());
-        if (shovelCollected)
+        if (PlayerPrefs.GetInt("ShovelAdded") > 0)
         {
             gameObject.SetActive(false);
         }
@@ -14,8 +13,8 @@ public class Shovel : MonoBehaviour
 
     public void Collect()
     {
-        var (equipmentsOwned, equipped, _) = SaveManager.LoadEquipment(new List<Equipment>());
-        SaveManager.SaveEquipment(equipmentsOwned, equipped, true);
+        PlayerPrefs.SetInt(("ShovelAdded"), 1);
+        Player.Instance.GetComponent<PlayerEquipment>().Add(EquipmentType.Shovel);
         gameObject.SetActive(false);
     }
 }

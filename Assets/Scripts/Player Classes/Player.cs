@@ -76,13 +76,13 @@ public class Player : MonoBehaviour
 
         if (destination.GetComponent<Equipment>() != null)
         {
-            playerEquipment.Add(destination.GetComponent<Equipment>());
             if (destination.GetComponent<Shovel>() != null)
             {
                 destination.GetComponent<Shovel>().Collect();
             }
             else if (destination.GetComponent<DroppedItem>() != null)
             {
+                playerEquipment.Add(destination.GetComponent<Equipment>().equipmentType);
                 DroppedItem droppedItem = destination.GetComponent<DroppedItem>();
                 droppedItem.Pickup();
             }
