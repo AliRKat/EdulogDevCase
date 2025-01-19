@@ -8,7 +8,7 @@ public class SaveManager
     private static readonly string playerDataPath = Application.persistentDataPath + "/playerData.json";
     private static readonly string inventoryPath = Application.persistentDataPath + "/inventory.json";
     private static readonly string equipmentPath = Application.persistentDataPath + "/equipment.json";
-    private static string droppedItemPath = Path.Combine(Application.persistentDataPath, "droppedItems.json");
+    private static readonly string droppedItemPath = Application.persistentDataPath + "/droppedItems.json";
 
     public static void SaveEquipment(List<Equipment> equipmentsOwned, Equipment equipped, bool shovelCollected)
     {

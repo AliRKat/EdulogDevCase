@@ -1,4 +1,4 @@
-using Unity.VisualScripting;
+using System;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -8,8 +8,8 @@ public class EquipmentObjectUI : MonoBehaviour
     [SerializeField] private Button button;
 
     private Equipment assignedEquipment;
-    private System.Action<Equipment> onButtonClick;
-    public void Setup(Equipment equipment, System.Action<Equipment> clickCallback)
+    private Action<Equipment> onButtonClick;
+    public void Setup(Equipment equipment, Action<Equipment> clickCallback)
     {
         assignedEquipment = equipment;
         Sprite sprite = equipment.GetObjectSprite();

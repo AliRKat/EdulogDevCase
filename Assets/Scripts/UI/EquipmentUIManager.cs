@@ -38,6 +38,10 @@ public class EquipmentUIManager : MonoBehaviour
     private void Start()
     {
         Player.Instance.OnEquipmentUpdate += HandleEquipmentUpdate;
+
+        equipButton.onClick.AddListener(Equip);
+        unequipButton.onClick.AddListener(Unequip);
+        dropButton.onClick.AddListener(Drop);
     }
 
     private void OnDisable()
@@ -95,10 +99,7 @@ public class EquipmentUIManager : MonoBehaviour
         if (pickedEquipment != null)
         {
             unequipAction?.Invoke(pickedEquipment);
-            if (Player.Instance.GetComponent<PlayerEquipment>().GetCurrentEquipped() != null)
-            {
-                ClearEquipmentDetailsScreen();
-            }
+            ClearEquipmentDetailsScreen();
         }
     }
 
@@ -107,10 +108,7 @@ public class EquipmentUIManager : MonoBehaviour
         if(pickedEquipment != null)
         {
             dropAction?.Invoke(pickedEquipment);
-            if (Player.Instance.GetComponent<PlayerEquipment>().GetCurrentEquipped() != null)
-            {
-                ClearEquipmentDetailsScreen();
-            }
+            ClearEquipmentDetailsScreen();
         }
     }
 
@@ -124,19 +122,20 @@ public class EquipmentUIManager : MonoBehaviour
         equipmentList = Player.Instance.GetComponent<PlayerEquipment>().GetEquipmentsOwned();
         foreach (var entry in equipmentList)
         {
-            if (entry.GetEquipmentName() != "House")
+            if (entry.GetEquipmentName() == "House")
             {
-                var equipObj = Instantiate(equipmentObjButton, inventoryContent);
-                EquipmentObjectUI inventoryUI = equipObj.GetComponent<EquipmentObjectUI>();
+                continue;
+            }
+            var equipObj = Instantiate(equipmentObjButton, inventoryContent);
+            EquipmentObjectUI inventoryUI = equipObj.GetComponent<EquipmentObjectUI>();
 
-                if (inventoryUI != null)
-                {
-                    inventoryUI.Setup(entry, UpdateEquipmentDetailsScreen);
-                }
-                else
-                {
-                    Debug.LogError("EquipmentObjectUI component missing on the equipment button prefab.");
-                }
+            if (inventoryUI != null)
+            {
+                inventoryUI.Setup(entry, UpdateEquipmentDetailsScreen);
+            }
+            else
+            {
+                Debug.LogError("EquipmentObjectUI component missing on the equipment button prefab.");
             }
         }
     }

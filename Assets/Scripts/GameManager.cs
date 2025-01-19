@@ -142,13 +142,25 @@ public class GameManager : MonoBehaviour
     {
         Quest activeQuest = QuestManager.Instance.activeQuest;
         string objectivesText = "";
+        var inventory = Player.Instance.GetPlayerInventory();
+
+        // Add quest objectives
         foreach (var objective in activeQuest.Objectives)
         {
             objectivesText += $"{objective.Key}: Level {objective.Value}\n";
         }
 
+        // Add inventory items
+        string inventoryText = "Current Inventory:\n";
+        foreach (var item in inventory)
+        {
+            inventoryText += $"{item.Key.Name}: {item.Value}\n";
+        }
+
+        // Update general text
         generalText.text = $"Level: {Player.Instance.GetPlayerLevel()}\nMoney: {Player.Instance.GetPlayerMoney()}\n" +
-                           $"Quest Objectives:\n{objectivesText}";
+                           $"Quest Objectives:\n{objectivesText}" +
+                           $"{inventoryText}";
     }
 
 

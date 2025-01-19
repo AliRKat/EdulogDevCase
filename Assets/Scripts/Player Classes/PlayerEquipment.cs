@@ -7,7 +7,6 @@ public class PlayerEquipment : MonoBehaviour
 {
     public List<Equipment> EquipmentPrefabs;
     private List<Equipment> EquipmentsOwned = new List<Equipment>();
-    private Dictionary<string, GameObject> equipmentMeshMap;
     public Equipment Equipped;
     
     public event Action EquipmentUpdated;
@@ -20,7 +19,6 @@ public class PlayerEquipment : MonoBehaviour
     private void Start()
     {
         SubscribeToEquipEvents();
-        InitializeMeshReferences();
         LoadEquipments();
     }
     private void Update()
@@ -44,52 +42,65 @@ public class PlayerEquipment : MonoBehaviour
         EquipmentsOwned = loadedEquipments;
         Equipped = equipped;
 
-        DeactivateAllEquipmentMeshes();
         if (Equipped != null)
         {
-            ActivateEquipmentMesh(Equipped);
+            Activate(Equipped);
         }
 
         EquipmentUpdated?.Invoke();
     }
 
+    private void Activate(Equipment eq)
+    {
+        foreach (var item in EquipmentPrefabs)
+        {
+            if(eq.equipmentType == item.equipmentType)
+            {
+                item.meshReference.gameObject.SetActive(true);
+            }
+        }
+    }
+
+    private void Deactivate(Equipment eq)
+    {
+        foreach (var item in EquipmentPrefabs)
+        {
+            if (eq.equipmentType == item.equipmentType)
+            {
+                item.meshReference.gameObject.SetActive(false);
+            }
+        }
+    }
+
     public void Equip(Equipment equipment)
     {
-        if (!IsEquipmentOwned(equipment))
+        if (Equipped != null)
         {
-            return;
+            Deactivate(Equipped);
         }
 
-        // handle equipment switch
-        DeactivateAllEquipmentMeshes();
-        ActivateEquipmentMesh(equipment);
-        Equipped = equipment;
+        if (equipment != null)
+        {
+            Equipped = equipment;
+            Activate(equipment);
+        }
     }
 
     public void Unequip(Equipment equipment)
     {
-        if (Equipped != null) 
+        if (equipment != null) 
         {
-            if (!IsEquipmentOwned(equipment))
-            {
-                return;
-            }
-
-            DeactivateAllEquipmentMeshes();
             Equipped = null;
+            Deactivate(equipment);
         }
     }
 
     public void Drop(Equipment equipment)
     {
-        if (!IsEquipmentOwned(equipment))
-        {
-            return;
-        }
         var prefab = EquipmentPrefabs.Find(item => item.GetEquipmentName() == equipment.GetEquipmentName());
 
         EquipmentsOwned.Remove(prefab);
-        DeactivateAllEquipmentMeshes();
+        Deactivate(equipment);
         EquipmentUpdated?.Invoke();
         Equipped = null;
 
@@ -154,7 +165,6 @@ public class PlayerEquipment : MonoBehaviour
             return;
         }
 
-        // handle equipment level switch
         equipment.LevelUp();
     }
 
@@ -197,49 +207,6 @@ public class PlayerEquipment : MonoBehaviour
     public Equipment GetCurrentEquipped()
     {
         return Equipped;
-    }
-
-    private void DeactivateAllEquipmentMeshes()
-    {
-        foreach (var mesh in equipmentMeshMap.Values)
-        {
-            mesh.SetActive(false);
-        }
-    }
-
-    private void ActivateEquipmentMesh(Equipment equipment)
-    {
-        if (equipmentMeshMap.TryGetValue(equipment.GetEquipmentName(), out var mesh))
-        {
-            mesh.SetActive(true);
-        }
-        else
-        {
-            Debug.LogWarning($"Mesh not found for {equipment.GetEquipmentName()}");
-        }
-    }
-
-    private void InitializeMeshReferences()
-    {
-        equipmentMeshMap = new Dictionary<string, GameObject>();
-
-        foreach (var equipmentPrefab in EquipmentPrefabs)
-        {
-            if(equipmentPrefab.meshReference != null)
-            {
-                var meshChild = equipmentPrefab.meshReference;
-
-                if (meshChild != null)
-                {
-                    equipmentMeshMap[equipmentPrefab.GetEquipmentName()] = meshChild;
-                }
-                else
-                {
-                    Debug.LogWarning($"Mesh child not found for {equipmentPrefab.GetEquipmentName()}");
-                }
-            }
-            
-        }
     }
 
     private void SubscribeToEquipEvents()

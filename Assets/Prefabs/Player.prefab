@@ -288,6 +288,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 126101cce15d7fc449e93605df2a90c3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  playerHouse: {fileID: 0}
 --- !u!114 &7024135701298252352
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -353,6 +354,7 @@ MonoBehaviour:
   - {fileID: 1145814009562268907}
   - {fileID: 4466429389461217239}
   - {fileID: 476333079052637860}
+  - {fileID: 0}
   Equipped: {fileID: 0}
 --- !u!114 &8406030043669772437
 MonoBehaviour:
