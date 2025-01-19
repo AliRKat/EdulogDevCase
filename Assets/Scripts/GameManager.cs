@@ -1,5 +1,7 @@
 using System;
 using System.Collections.Generic;
+using TMPro;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class GameManager : MonoBehaviour
@@ -11,6 +13,11 @@ public class GameManager : MonoBehaviour
     private GameObject SelectedObject;
     private Camera mainCamera;
     private GameObject lastHoveredObject;
+
+    public List<GameObject> itemPrefabs;
+    private Dictionary<string, GameObject> prefabDictionary;
+    public TMP_Text generalText;
+
 
     private void Awake()
     {
@@ -26,9 +33,70 @@ public class GameManager : MonoBehaviour
         SelectableObject.DefaultHighlightMaterial = DefaultHighlightMaterial;
     }
 
+    private void InitializePrefabDictionary()
+    {
+        prefabDictionary = new Dictionary<string, GameObject>();
+
+        foreach (var item in itemPrefabs)
+        {
+            // Equipment bileþenini al
+            Equipment equipment = item.GetComponent<Equipment>();
+            if (equipment != null)
+            {
+                // Equipment türünü al ve string olarak kullan
+                string equipmentType = equipment.GetEquipmentType().ToString();
+
+                // Dictionary'ye ekle
+                if (!prefabDictionary.ContainsKey(equipmentType))
+                {
+                    prefabDictionary.Add(equipmentType, item);
+                }
+                else
+                {
+                    Debug.LogWarning($"Prefab dictionary already contains an entry for equipment type: {equipmentType}");
+                }
+            }
+            else
+            {
+                Debug.LogError($"Item {item.name} does not have an Equipment component!");
+            }
+        }
+    }
+
+    private void Start()
+    {
+        InitializePrefabDictionary();
+        var droppedItems = SaveManager.LoadDroppedItems();
+        if (droppedItems.Count > 0)
+        {
+            foreach (var itemData in droppedItems)
+            {
+                Debug.Log($"Attempting to find prefab for: {itemData.prefabName}");
+
+                if (prefabDictionary.TryGetValue(itemData.prefabName, out var itemPrefab))
+                {
+
+                    Quaternion desiredRotation = Quaternion.Euler(-90, 0, 0);
+
+                    GameObject itemInstance = Instantiate(itemPrefab, itemData.position, desiredRotation);
+                    DroppedItem droppedItem = itemInstance.AddComponent<DroppedItem>();
+                    droppedItem.AddComponent<SelectableObject>();
+                    droppedItem.ItemID = itemData.itemID;
+                    droppedItem.PrefabName = itemData.prefabName;
+                    Debug.Log($"Successfully instantiated prefab: {itemData.prefabName}");
+                }
+                else
+                {
+                    Debug.LogWarning($"Prefab '{itemData.prefabName}' not found in the dictionary! Available keys: {string.Join(", ", prefabDictionary.Keys)}");
+                }
+            }
+        }
+    }
+
     void Update()
     {
         HighlightObjectLogic();
+        UpdateGeneralText();
     }
 
     void HighlightObjectLogic()
@@ -69,6 +137,20 @@ public class GameManager : MonoBehaviour
         SelectedObject = obj;
         OnInteractableClicked?.Invoke(obj);
     }
+
+    void UpdateGeneralText()
+    {
+        Quest activeQuest = QuestManager.Instance.activeQuest;
+        string objectivesText = "";
+        foreach (var objective in activeQuest.Objectives)
+        {
+            objectivesText += $"{objective.Key}: Level {objective.Value}\n";
+        }
+
+        generalText.text = $"Level: {Player.Instance.GetPlayerLevel()}\nMoney: {Player.Instance.GetPlayerMoney()}\n" +
+                           $"Quest Objectives:\n{objectivesText}";
+    }
+
 
     public bool IsObjectSelected()
     {

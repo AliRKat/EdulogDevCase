@@ -6,6 +6,7 @@ public class Gatherable : MonoBehaviour
 {
     public GatherableSO gatherableData;
     [SerializeField] private GatherableStates state; // serializing for debug purposes
+    [SerializeField] private GameObject FXObj;
     private float plowTime;
     private float growTime;
     private float harvestTime;
@@ -29,6 +30,11 @@ public class Gatherable : MonoBehaviour
         gatherableId = gatherableData.name + "_" + transform.position.ToString();
         LoadState();
         SubscribeToPlayerEvents();
+
+        if (state == GatherableStates.Gatherable)
+        {
+            FXObj.transform.position = new Vector3(0, 0, 0);
+        }
     }
     public void SubscribeToPlayerEvents()
     {
@@ -122,7 +128,21 @@ public class Gatherable : MonoBehaviour
 
     private IEnumerator GrowCoroutine(Gatherable obj, float time, GatherableStates state)
     {
-        yield return new WaitForSeconds(time);
+        float startY = obj.FXObj.transform.position.y;
+        float endY = 0f;
+
+        float elapsedTime = 0f;
+        while (elapsedTime < time)
+        {
+            float newY = Mathf.Lerp(startY, endY, elapsedTime / time);
+            obj.FXObj.transform.position = new Vector3(obj.FXObj.transform.position.x, newY, obj.FXObj.transform.position.z);
+
+            elapsedTime += Time.deltaTime;
+            yield return null;
+        }
+
+        obj.FXObj.transform.position = new Vector3(obj.FXObj.transform.position.x, endY, obj.FXObj.transform.position.z);
+
         SwitchState(obj, state);
     }
 
@@ -153,12 +173,30 @@ public class Gatherable : MonoBehaviour
     {
         if (obj == this.gameObject)
         {
-            // FX and other visuals related to Gatherable will be handled here
             Gatherable gatherableObj = obj.GetComponent<Gatherable>();
             Debug.Log("Gatherable: Handling harvest finish");
+            StartCoroutine(ReturnFXToOriginalPosition(gatherableObj));
             SwitchState(gatherableObj, GatherableStates.Plowable);
         }
     }
+
+    private IEnumerator ReturnFXToOriginalPosition(Gatherable gatherableObj)
+    {
+        Vector3 originalPosition = gatherableObj.FXObj.transform.position;
+        float targetY = -1f;
+        float timeToReturn = 0.1f;
+        float elapsedTime = 0f;
+
+        while (elapsedTime < timeToReturn)
+        {
+            float newY = Mathf.Lerp(gatherableObj.FXObj.transform.position.y, targetY, elapsedTime / timeToReturn);
+            gatherableObj.FXObj.transform.position = new Vector3(gatherableObj.FXObj.transform.position.x, newY, gatherableObj.FXObj.transform.position.z);
+            elapsedTime += Time.deltaTime;
+            yield return null;
+        }
+        gatherableObj.FXObj.transform.position = new Vector3(gatherableObj.FXObj.transform.position.x, targetY, gatherableObj.FXObj.transform.position.z);
+    }
+
     #endregion
     private void OnDisable()
     {

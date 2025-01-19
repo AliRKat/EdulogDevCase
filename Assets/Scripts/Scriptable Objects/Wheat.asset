@@ -15,7 +15,7 @@ MonoBehaviour:
   state: 0
   gatherableName: Wheat
   plowTime: 3
-  growTime: 3
+  growTime: 5
   harvestTime: 3
   harvestXPAmount: 100
   harvestAmount: 4

@@ -13,26 +13,28 @@ public class BuyObjectUI : MonoBehaviour
     public void Setup(Equipment equipment, int money, int playerLevel, Action<int> buyCallback)
     {
         headerText.text = equipment.name;
-        string requirements = $"Money: {equipment.GetBasePrice()}";
+        string requirements = $"";
+        int priceAmount = equipment.GetBasePrice() * equipment.GetLevel();
 
         if (playerLevel < equipment.GetMinimumLevel())
         {
-            requirements += $"\nLevel Required: {equipment.GetMinimumLevel()}";
+            requirements += $"Level Required: {equipment.GetMinimumLevel()}\nPrice:{priceAmount}";
         }
-        else
+
+        if (IsEquipmentOwned(equipment) || equipment.GetEquipmentName() == "House")
         {
-            requirements += $"\nLevel Required: {equipment.GetLevel()}";
+            requirements += $"\nCurrent Level: {equipment.GetLevel()}\nPrice:{priceAmount}";
         }
 
         requirementsText.text = requirements;
 
-        if (IsEquipmentOwned(equipment) || equipment.GetEquipmentName() == "House") // extreme laziness
+        if (IsEquipmentOwned(equipment) || equipment.GetEquipmentName() == "House")
         {
-            buyButtonText.text = $"Upgrade - {equipment.GetBasePrice() * equipment.GetLevel()}";
+            buyButtonText.text = $"Upgrade - {priceAmount}";
         }
         else
         {
-            buyButtonText.text = $"Buy - {equipment.GetBasePrice()}";
+            buyButtonText.text = $"Buy - {priceAmount}";
         }
 
         buyButton.onClick.RemoveAllListeners();

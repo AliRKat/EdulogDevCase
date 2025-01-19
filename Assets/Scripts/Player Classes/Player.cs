@@ -81,6 +81,11 @@ public class Player : MonoBehaviour
             {
                 destination.GetComponent<Shovel>().Collect();
             }
+            else if (destination.GetComponent<DroppedItem>() != null)
+            {
+                DroppedItem droppedItem = destination.GetComponent<DroppedItem>();
+                droppedItem.Pickup();
+            }
             else
             {
                 Destroy(destination);

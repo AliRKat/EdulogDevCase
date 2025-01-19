@@ -4,8 +4,9 @@ public class Equipment : MonoBehaviour
 {
     public UpgradeableSO equipmentData;
     public GameObject meshReference;
+    public EquipmentType equipmentType;
 
-    internal int level = 1;
+    [SerializeField] internal int level = 1;
 
     private string equipmentName;
     private string equipmentDescription;
@@ -15,7 +16,7 @@ public class Equipment : MonoBehaviour
     private int basePrice;
     private int upgradeMultiplier;
     private Sprite objectSprite;
-
+    
     private void Start()
     {
         equipmentName = equipmentData.equipmentName;
@@ -71,6 +72,10 @@ public class Equipment : MonoBehaviour
     public Sprite GetObjectSprite()
     {
         return objectSprite;
+    }
+    public EquipmentType GetEquipmentType()
+    {
+        return equipmentType;
     }
 
     public void LevelUp()

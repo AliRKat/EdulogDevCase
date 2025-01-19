@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine;
-using static UnityEditor.Progress;
 
 public class PlayerInventory : MonoBehaviour
 {
@@ -79,6 +78,7 @@ public class PlayerInventory : MonoBehaviour
                 }
             }
         }
+        AddBonus(itemToAdd);
     }
 
     // Adds an item to the inventory
@@ -94,16 +94,21 @@ public class PlayerInventory : MonoBehaviour
         }
 
         InventoryUpdated?.Invoke();
-        AddBonus();
         SaveData();
     }
 
-    private void AddBonus()
+    private void AddBonus(ItemBase item)
     {
         Equipment currentEq = Player.Instance.GetComponent<PlayerEquipment>().GetCurrentEquipped();
+        if (currentEq == null) 
+        {
+            return;
+        }
+
         if (currentEq.GetBonusType() == BonusTypes.HarvestAmount)
         {
-            int bonusAmount = (int)(currentEq.GetLevel() * currentEq.GetBonusMultiplier());
+            int bonusAmount = currentEq.GetLevel() * (int)currentEq.GetBonusMultiplier();
+            inventory[item] += bonusAmount;
         }
     }
 

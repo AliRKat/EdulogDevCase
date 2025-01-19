@@ -1,0 +1,1 @@
+public enum EquipmentType { Shovel, Pitchfork, Scythe, Other }

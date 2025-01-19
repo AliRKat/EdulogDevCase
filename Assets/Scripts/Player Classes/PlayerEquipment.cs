@@ -12,11 +12,20 @@ public class PlayerEquipment : MonoBehaviour
     
     public event Action EquipmentUpdated;
 
+    Equipment questEquipment;
+    Quest activeQuest;
+    string questEquipmentType;
+    int questLevel;
+
     private void Start()
     {
         SubscribeToEquipEvents();
         InitializeMeshReferences();
         LoadEquipments();
+    }
+    private void Update()
+    {
+        CheckQuestStatus();
     }
     private void OnApplicationQuit()
     {
@@ -132,6 +141,10 @@ public class PlayerEquipment : MonoBehaviour
         droppedObject.transform.position = targetPosition;
         droppedObject.transform.rotation = targetRotation;
         droppedObject.AddComponent<SelectableObject>();
+
+        DroppedItem droppedItem = droppedObject.AddComponent<DroppedItem>();
+        droppedItem.SetPrefabName(droppedObject.GetComponent<Equipment>().GetEquipmentName());
+        droppedItem.Save();
     }
 
     public void Upgrade(Equipment equipment)
@@ -243,5 +256,41 @@ public class PlayerEquipment : MonoBehaviour
         equipmentUIManager.equipAction -= Equip;
         equipmentUIManager.unequipAction -= Unequip;
         equipmentUIManager.dropAction -= Drop;
+    }
+
+    public void EquipmentQuest(Dictionary<string, int> questObjectives, Quest quest)
+    {
+        foreach (var objective in questObjectives)
+        {
+            questEquipmentType = objective.Key;
+            questLevel = objective.Value;
+            activeQuest = quest;
+            Debug.Log($"Quest Objective: {questEquipmentType} => Level {questLevel}");
+
+            EquipmentType equipmentType;
+            if (Enum.TryParse(questEquipmentType, out equipmentType))
+            {
+                List<Equipment> allEquipments = GetAllEquipments();
+                Equipment equipment = allEquipments.Find(eq => eq.GetEquipmentType() == equipmentType);
+                questEquipment = equipment;
+            }
+            else
+            {
+                Debug.LogError($"Invalid equipment type: {questEquipmentType}");
+            }
+        }
+    }
+
+    private void CheckQuestStatus()
+    {
+        if (questEquipment == null)
+        {
+            return;
+        }
+
+        if (questEquipment.GetLevel() == questLevel)
+        {
+            QuestManager.Instance.QuestCompleted(activeQuest);
+        }
     }
 }

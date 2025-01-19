@@ -122,7 +122,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   equipmentData: {fileID: 11400000, guid: 05efe78dd31503743b94563a94c39894, type: 2}
-  meshObject: {fileID: 0}
+  meshReference: {fileID: 0}
+  equipmentType: 3
 --- !u!1 &1280174799205778
 GameObject:
   m_ObjectHideFlags: 0

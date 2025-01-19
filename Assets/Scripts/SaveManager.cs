@@ -8,6 +8,7 @@ public class SaveManager
     private static readonly string playerDataPath = Application.persistentDataPath + "/playerData.json";
     private static readonly string inventoryPath = Application.persistentDataPath + "/inventory.json";
     private static readonly string equipmentPath = Application.persistentDataPath + "/equipment.json";
+    private static string droppedItemPath = Path.Combine(Application.persistentDataPath, "droppedItems.json");
 
     public static void SaveEquipment(List<Equipment> equipmentsOwned, Equipment equipped, bool shovelCollected)
     {
@@ -133,6 +134,52 @@ public class SaveManager
         return playerData;
     }
 
+    public static void SaveDroppedItems(List<DroppedItemData> droppedItems)
+    {
+        try
+        {
+            string json = JsonUtility.ToJson(new DroppedItemsContainer { items = droppedItems });
+            File.WriteAllText(droppedItemPath, json);
+        }
+        catch (System.Exception ex)
+        {
+            Debug.LogError($"Failed to save dropped items: {ex.Message}");
+        }
+    }
+
+    public static List<DroppedItemData> LoadDroppedItems()
+    {
+        if (!File.Exists(droppedItemPath))
+        {
+            return new List<DroppedItemData>();
+        }
+
+        try
+        {
+            string json = File.ReadAllText(droppedItemPath);
+            DroppedItemsContainer container = JsonUtility.FromJson<DroppedItemsContainer>(json);
+            return container?.items ?? new List<DroppedItemData>();
+        }
+        catch (System.Exception ex)
+        {
+            Debug.LogError($"Failed to load dropped items: {ex.Message}");
+            return new List<DroppedItemData>();
+        }
+    }
+
+    public static void RemoveDroppedItem(string itemID)
+    {
+        var droppedItems = LoadDroppedItems();
+        droppedItems.RemoveAll(item => item.itemID == itemID);
+        SaveDroppedItems(droppedItems);
+    }
+
+    [System.Serializable]
+    public class DroppedItemsContainer
+    {
+        public List<DroppedItemData> items;
+    }
+
     #region Clear-up methods for debug purposes
     public static void ClearInventoryData()
     {
@@ -170,6 +217,11 @@ public class SaveManager
         else
         {
             Debug.LogWarning("SaveManager: No player data file found to delete.");
+        }
+
+        if (File.Exists(droppedItemPath))
+        {
+            File.Delete(droppedItemPath);
         }
     }
 
@@ -260,7 +312,7 @@ public class EquipmentSaveData
 {
     public List<SerializableEquipment> EquipmentsOwned;
     public string EquippedEquipment;
-    public bool ShovelCollected; // Yeni alan
+    public bool ShovelCollected;
 
     public EquipmentSaveData(List<SerializableEquipment> equipmentsOwned, string equippedEquipment, bool shovelCollected)
     {
@@ -268,4 +320,12 @@ public class EquipmentSaveData
         EquippedEquipment = equippedEquipment;
         ShovelCollected = shovelCollected;
     }
+}
+
+[System.Serializable]
+public class DroppedItemData
+{
+    public string itemID;
+    public string prefabName;
+    public Vector3 position;
 }
