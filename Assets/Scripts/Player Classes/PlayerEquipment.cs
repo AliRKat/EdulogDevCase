@@ -81,6 +81,7 @@ public class PlayerEquipment : MonoBehaviour
             Equipped = equipment;
             Activate(equipment);
         }
+        SaveEquipments();
     }
 
     public void Unequip(Equipment equipment)
@@ -90,6 +91,7 @@ public class PlayerEquipment : MonoBehaviour
             Equipped = null;
             Deactivate(equipment);
         }
+        SaveEquipments();
     }
 
     public void Drop(Equipment equipment)
@@ -155,16 +157,6 @@ public class PlayerEquipment : MonoBehaviour
         droppedItem.Save();
     }
 
-    public void Upgrade(Equipment equipment)
-    {
-        if (!IsEquipmentOwned(equipment))
-        {
-            return;
-        }
-
-        equipment.LevelUp();
-    }
-
     public void Add(Equipment equipment)
     {
         if (IsEquipmentOwned(equipment))
@@ -178,12 +170,12 @@ public class PlayerEquipment : MonoBehaviour
         {
             EquipmentsOwned.Add(prefab);
             EquipmentUpdated?.Invoke();
-            SaveEquipments();
         }
         else
         {
             Debug.LogWarning("Prefab not found for " + equipment.GetEquipmentName());
         }
+        SaveEquipments();
     }
 
     public bool IsEquipmentOwned(Equipment equipment)
