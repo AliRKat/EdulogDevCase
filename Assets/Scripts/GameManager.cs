@@ -40,14 +40,11 @@ public class GameManager : MonoBehaviour
 
         foreach (var item in itemPrefabs)
         {
-            // Equipment bileþenini al
             Equipment equipment = item.GetComponent<Equipment>();
             if (equipment != null)
             {
-                // Equipment türünü al ve string olarak kullan
                 string equipmentType = equipment.GetEquipmentType().ToString();
 
-                // Dictionary'ye ekle
                 if (!prefabDictionary.ContainsKey(equipmentType))
                 {
                     prefabDictionary.Add(equipmentType, item);
