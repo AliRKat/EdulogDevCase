@@ -47,11 +47,11 @@ public class SoundManager : MonoBehaviour
 
         if (isEnabled)
         {
-            backgroundMusicSource.Play();
+            PlayBackgroundMusic(backgroundMusicSource.clip);
         }
         else
         {
-            backgroundMusicSource.Stop();
+            StopBackgroundMusic();
         }
     }
 

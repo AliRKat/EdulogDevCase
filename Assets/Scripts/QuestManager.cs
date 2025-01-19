@@ -28,7 +28,6 @@ public class QuestManager : MonoBehaviour
     }
     private void Start()
     {
-        Debug.Log(Application.persistentDataPath);
         playerInventory = Player.Instance.GetComponent<PlayerInventory>();
         playerLevel = Player.Instance.GetComponent<PlayerLevel>();
         playerEquipment = Player.Instance.GetComponent<PlayerEquipment>();

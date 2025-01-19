@@ -20,10 +20,13 @@ public class BuyObjectUI : MonoBehaviour
         {
             requirements += $"Level Required: {equipment.GetMinimumLevel()}\nPrice:{priceAmount}";
         }
-
-        if (IsEquipmentOwned(equipment) || equipment.GetEquipmentName() == "House")
+        else if (IsEquipmentOwned(equipment) || equipment.GetEquipmentName() == "House")
         {
             requirements += $"\nCurrent Level: {equipment.GetLevel()}\nPrice:{priceAmount}";
+        }
+        else
+        {
+            requirements += $"Price:{priceAmount}";
         }
 
         requirementsText.text = requirements;

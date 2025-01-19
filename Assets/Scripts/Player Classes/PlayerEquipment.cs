@@ -20,14 +20,11 @@ public class PlayerEquipment : MonoBehaviour
     {
         SubscribeToEquipEvents();
         LoadEquipments();
+        EquipmentsOwned.Add(Player.Instance.playerHouse);
     }
     private void Update()
     {
         CheckQuestStatus();
-    }
-    private void OnApplicationQuit()
-    {
-        SaveEquipments();
     }
 
     private void SaveEquipments()
@@ -219,6 +216,7 @@ public class PlayerEquipment : MonoBehaviour
 
     private void OnDisable()
     {
+        SaveEquipments();
         EquipmentUIManager equipmentUIManager = EquipmentUIManager.Instance;
         equipmentUIManager.equipAction -= Equip;
         equipmentUIManager.unequipAction -= Unequip;
