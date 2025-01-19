@@ -10,6 +10,7 @@ public class MarketUIManager : MonoBehaviour
     [SerializeField] private GameObject buyObjectPrefab;
     [SerializeField] private Transform sellPanelContent;
     [SerializeField] private Transform buyPanelContent;
+    [SerializeField] private GameObject nothingToSellText;
     private Dictionary<ItemBase, SellObjectUI> sellObjects = new Dictionary<ItemBase, SellObjectUI>();
 
     private void Start()
@@ -57,19 +58,27 @@ public class MarketUIManager : MonoBehaviour
         }
 
         sellObjects.Clear();
-
+        nothingToSellText.SetActive(false);
         var inventory = Player.Instance.GetPlayerInventory();
-        foreach (var entry in inventory)
+        if  (inventory.Count > 0)
         {
-            var item = entry.Key;
-            var amount = entry.Value;
+            foreach (var entry in inventory)
+            {
+                var item = entry.Key;
+                var amount = entry.Value;
 
-            var sellObject = Instantiate(sellObjectPrefab, sellPanelContent);
-            var sellObjectUI = sellObject.GetComponent<SellObjectUI>();
+                var sellObject = Instantiate(sellObjectPrefab, sellPanelContent);
+                var sellObjectUI = sellObject.GetComponent<SellObjectUI>();
 
-            sellObjectUI.Setup(item, amount, OnSliderValueChanged, OnSellItem);
-            sellObjects[item] = sellObjectUI;
+                sellObjectUI.Setup(item, amount, OnSliderValueChanged, OnSellItem);
+                sellObjects[item] = sellObjectUI;
+            }
         }
+        else
+        {
+            nothingToSellText.SetActive(true);
+        }
+        
     }
 
     private void PopulateBuyPanel()

@@ -84,24 +84,33 @@ public class EquipmentUIManager : MonoBehaviour
 
     public void Equip()
     {
-        equipAction?.Invoke(pickedEquipment);
+        if (pickedEquipment != null)
+        {
+            equipAction?.Invoke(pickedEquipment);
+        }
     }
 
     public void Unequip()
     {
-        unequipAction?.Invoke(pickedEquipment);
-        if (Player.Instance.GetComponent<PlayerEquipment>().GetCurrentEquipped() != null)
+        if (pickedEquipment != null)
         {
-            ClearEquipmentDetailsScreen();
-        } 
+            unequipAction?.Invoke(pickedEquipment);
+            if (Player.Instance.GetComponent<PlayerEquipment>().GetCurrentEquipped() != null)
+            {
+                ClearEquipmentDetailsScreen();
+            }
+        }
     }
 
     public void Drop()
     {
-        dropAction?.Invoke(pickedEquipment);
-        if (Player.Instance.GetComponent<PlayerEquipment>().GetCurrentEquipped() != null)
+        if(pickedEquipment != null)
         {
-            ClearEquipmentDetailsScreen();
+            dropAction?.Invoke(pickedEquipment);
+            if (Player.Instance.GetComponent<PlayerEquipment>().GetCurrentEquipped() != null)
+            {
+                ClearEquipmentDetailsScreen();
+            }
         }
     }
 
